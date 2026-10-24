@@ -1,9 +1,13 @@
-# متطلبات KAC الأصلية (300 + 50 إضافية)
+# KAC requirements tracking — updated 2026.10.1
 
-الجدول التفصيلي الكامل موجود في `FEATURE_MATRIX.csv` ويمكن فتحه في Excel أو محرر نصوص. **النسخة الحالية جزئية، والمتطلبات غير المنفذة موثقة بدل الاختلاق.** أكواد الإجراءات المؤكدة بالمستندات الرسمية **لا تعني نجاح اختبارات حساب Kick الحقيقي** حتى يتم نشر التطبيق وتفويضه.
+350 numbered original requirements are retained in `FEATURE_MATRIX.csv`. Do not interpret CODED or PARTIAL as live verified.
 
-- NOT_IMPLEMENTED: 238
-- CODED_CONFIG_AND_TEST_NEEDED: 26
-- PARTIAL_CONFIG_AND_TEST_NEEDED: 55
-- CODED_REQUIRES_LIVE_TEST: 23
+- CODED_CONFIG_AND_TEST_NEEDED: 20
+- CODED_FOREGROUND: 39
+- CODED_REQUIRES_LIVE_TEST: 36
+- NOT_IMPLEMENTED: 201
 - NOT_IN_VERIFIED_PUBLIC_API: 8
+- PARTIAL_CONFIG_AND_TEST_NEEDED: 38
+- PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED: 8
+
+Foreground scheduling stops when tab is hidden or closed. Continuous backend scheduling is NOT implemented.

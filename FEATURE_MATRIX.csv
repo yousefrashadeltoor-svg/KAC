@@ -52,11 +52,11 @@ A,50,عرض عدد المشاهدين المتاح من Kick.,CODED_CONFIG_AND_T
 A,51,عرض مدة البث المباشر.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,52,عرض معلومات القناة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
 A,53,فتح صفحة مستقلة لكل بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,54,تشغيل الفيديو المباشر داخل التطبيق عند إتاحة التضمين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,55,التحكم في تشغيل وإيقاف الفيديو.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,54,تشغيل الفيديو المباشر داخل التطبيق عند إتاحة التضمين.,CODED_REQUIRES_LIVE_TEST,Official Kick embed player; user-initiated; verified against help.kick.com.
+A,55,التحكم في تشغيل وإيقاف الفيديو.,CODED_FOREGROUND,User can close or open the official embedded player; player-native controls supplied by Kick.
 A,56,اختيار جودة الفيديو المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,57,ضبط الجودة تلقائيًا حسب سرعة الاتصال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,58,عرض الفيديو والشات معًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
+A,58,عرض الفيديو والشات معًا.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Official Kick player and signed-webhook chat rendered on same page when configured.
 A,59,دعم مشاهدة البث من الموبايل والتابلت والكمبيوتر.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
 A,60,ترتيب البثوث حسب الحالة والنشاط.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
 A,61,تصفية البثوث المباشرة وغير المباشرة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
@@ -69,29 +69,29 @@ A,67,تحميل الرسائل القديمة المتاحة.,NOT_IMPLEMENTED,No
 A,68,الاحتفاظ بأرشيف الرسائل المستقبلة.,PARTIAL_CONFIG_AND_TEST_NEEDED,Redis last 350 events for 48h only
 A,69,الفصل بين شات البث الحالي والشات المؤرشف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,70,عرض الرسائل السابقة أثناء توقف البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,71,شريط تمرير مستقل للشات.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,72,تمرير الشات بإصبع واحد على الموبايل.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,73,الانتقال إلى أحدث رسالة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,74,التمرير التلقائي عند وصول رسائل جديدة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,75,إيقاف التمرير التلقائي أثناء قراءة الرسائل القديمة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,76,عرض اسم مرسل الرسالة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
+A,71,شريط تمرير مستقل للشات.,CODED_FOREGROUND,Chat panel CSS independent vertical scrolling.
+A,72,تمرير الشات بإصبع واحد على الموبايل.,CODED_FOREGROUND,Chat panel touch-action:pan-y.
+A,73,الانتقال إلى أحدث رسالة.,CODED_FOREGROUND,Latest button scrolls to bottom.
+A,74,التمرير التلقائي عند وصول رسائل جديدة.,CODED_FOREGROUND,Stick-to-bottom for received events when already near bottom.
+A,75,إيقاف التمرير التلقائي أثناء قراءة الرسائل القديمة.,CODED_FOREGROUND,Keeps prior position if user scrolled up.
+A,76,عرض اسم مرسل الرسالة.,CODED_REQUIRES_LIVE_TEST,Sender username from captured signed Kick event.
 A,77,عرض الصورة الشخصية للمرسل.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,78,عرض وقت إرسال الرسالة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,79,عرض شارات المستخدمين Badges.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,78,عرض وقت إرسال الرسالة.,CODED_REQUIRES_LIVE_TEST,Sender time from captured event timestamp.
+A,79,عرض شارات المستخدمين Badges.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Sender badge labels when Kick event includes identity.badges.
 A,80,تمييز المشرفين Moderators.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,81,تمييز الرسائل المرسلة من حساباتك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,81,تمييز الرسائل المرسلة من حساباتك.,CODED_REQUIRES_LIVE_TEST,Connected-account username highlighted on received messages.
 A,82,تمييز الرسائل التي ترد على حساباتك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,83,تمييز ردود المستخدمين الآخرين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,84,عرض الإيموتات الأصلية لـKick.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,85,معالجة صيغة `[emote:id:name]`.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,86,عرض الألوان الأصلية لأسماء المستخدمين عند توفرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,87,عرض الرسائل النظامية وأحداث الإشراف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,88,الرد على رسالة محددة.,PARTIAL_CONFIG_AND_TEST_NEEDED,reply_to_message_id with official POST chat
-A,89,عرض الرسالة الأصلية داخل الرد.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,90,إلغاء وضع الرد.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
+A,88,الرد على رسالة محددة.,CODED_REQUIRES_LIVE_TEST,Reply-to existing message via official chat endpoint.
+A,89,عرض الرسالة الأصلية داخل الرد.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Reply context rendered if included by Kick event.
+A,90,إلغاء وضع الرد.,CODED_FOREGROUND,Reply banner cancel button.
 A,91,إرسال الرد بالحساب المختار.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
 A,92,عرض الرسالة المرسلة داخل الشات بعد تأكيدها.,PARTIAL_CONFIG_AND_TEST_NEEDED,webhook only: delivery events not simulated
-A,93,البحث داخل الرسائل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,93,البحث داخل الرسائل.,CODED_REQUIRES_LIVE_TEST,Search within captured chat messages.
 A,94,تصفية الرسائل حسب المستخدم والنوع.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,95,عرض الإشارات Mentions.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,96,عرض عدد الرسائل غير المقروءة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
@@ -104,70 +104,70 @@ A,102,عرض وضع الإيموتات فقط.,NOT_IMPLEMENTED,No claim of activ
 A,103,عرض Slow Mode.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,104,إظهار حالة حظر الحساب من الشات عند توفرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,105,عرض مدة الحظر وسببه عند توفر البيانات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,106,إرسال رسائل حقيقية إلى قنوات Kick المسموح بالإرسال إليها.,PARTIAL_CONFIG_AND_TEST_NEEDED,Official POST /public/v1/chat
-A,107,اختيار الحساب المستخدم في الإرسال.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,108,اختيار القناة المستهدفة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,109,محرر رسائل متعدد.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,110,اعتبار كل سطر رسالة مستقلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,111,لصق عدة رسائل دفعة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,106,إرسال رسائل حقيقية إلى قنوات Kick المسموح بالإرسال إليها.,CODED_REQUIRES_LIVE_TEST,"Official POST /public/v1/chat with user OAuth; tested against mocked server, live credentials needed."
+A,107,اختيار الحساب المستخدم في الإرسال.,CODED_FOREGROUND,Choose account for manual/scheduled send.
+A,108,اختيار القناة المستهدفة.,CODED_FOREGROUND,Choose channel for manual/scheduled send.
+A,109,محرر رسائل متعدد.,CODED_FOREGROUND,Multi-line message editor in schedules.
+A,110,اعتبار كل سطر رسالة مستقلة.,CODED_FOREGROUND,Each nonempty line becomes separate scheduled message.
+A,111,لصق عدة رسائل دفعة واحدة.,CODED_FOREGROUND,Multi-line paste into schedule editor.
 A,112,لصق نص كامل كرسالة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,113,إضافة الرسائل وتعديلها وحذفها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,114,تكرار الرسائل داخل القائمة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,115,إعادة ترتيب الرسائل بالسحب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,116,تحديد الرسائل المستخدمة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,117,الإرسال بالترتيب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,118,اختيار الرسائل عشوائيًا.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,119,تحديد الفاصل الزمني بين الرسائل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,117,الإرسال بالترتيب.,CODED_FOREGROUND,Bounded ordered foreground send queue.
+A,118,اختيار الرسائل عشوائيًا.,CODED_FOREGROUND,Random selection from configured lines.
+A,119,تحديد الفاصل الزمني بين الرسائل.,CODED_FOREGROUND,Configurable minimum 30s interval.
 A,120,فاصل زمني عشوائي بحد أدنى وأقصى.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,121,تحديد عدد الرسائل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,121,تحديد عدد الرسائل.,CODED_FOREGROUND,Send count 1–30; foreground queue.
 A,122,تحديد عدد دورات الإرسال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,123,وضع إرسال مستمر مع الالتزام بقيود Kick.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,124,حساب المدة المتوقعة للإرسال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,124,حساب المدة المتوقعة للإرسال.,CODED_FOREGROUND,Visible next scheduled send timestamp.
 A,125,آلة حاسبة للثواني والدقائق والساعات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,126,إرسال الرسائل لقناة واحدة أو عدة قنوات مصرح بها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,127,إعدادات إرسال مستقلة لكل قناة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,128,إعدادات إرسال مستقلة لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,129,بدء الإرسال وإيقافه.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,130,إيقاف الطلبات المعلقة الممكن إلغاؤها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,131,إظهار حالة كل عملية إرسال.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,132,عرض الرسائل الناجحة والفاشلة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,133,عرض آخر وقت إرسال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,134,معالجة حدود الإرسال Rate Limits.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,135,التعامل مع أخطاء HTTP 429.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,136,منع تكرار الطلبات غير المؤكدة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,137,التحقق من نتيجة الإرسال.,PARTIAL_CONFIG_AND_TEST_NEEDED,Kick ChatResp.is_sent
-A,138,معالجة انتهاء الجلسة أثناء الإرسال.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,139,إرسال رسالة واحدة يدويًا.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
+A,129,بدء الإرسال وإيقافه.,CODED_FOREGROUND,"Start-now, pause, stop, resume through persisted local schedules."
+A,130,إيقاف الطلبات المعلقة الممكن إلغاؤها.,CODED_FOREGROUND,AbortController for in-flight browser request; outcome may remain ambiguous.
+A,131,إظهار حالة كل عملية إرسال.,CODED_REQUIRES_LIVE_TEST,"Per-schedule execution log, accepted count, status."
+A,132,عرض الرسائل الناجحة والفاشلة.,CODED_REQUIRES_LIVE_TEST,Accepted and failed counts; no false delivery claims.
+A,133,عرض آخر وقت إرسال.,CODED_REQUIRES_LIVE_TEST,Activity log timestamps.
+A,134,معالجة حدود الإرسال Rate Limits.,CODED_REQUIRES_LIVE_TEST,Server cooldown enforcement; Redis if configured.
+A,135,التعامل مع أخطاء HTTP 429.,CODED_REQUIRES_LIVE_TEST,HTTP 429 halts sequence; no automatic retry.
+A,136,منع تكرار الطلبات غير المؤكدة.,CODED_REQUIRES_LIVE_TEST,Message index reserved before request and no auto resend of uncertain sends.
+A,137,التحقق من نتيجة الإرسال.,CODED_REQUIRES_LIVE_TEST,Requires Kick is_sent=true for accepted state.
+A,138,معالجة انتهاء الجلسة أثناء الإرسال.,CODED_REQUIRES_LIVE_TEST,Missing/expired account pauses scheduler.
+A,139,إرسال رسالة واحدة يدويًا.,CODED_FOREGROUND,Manual single-message send retained.
 A,140,تفعيل الإرسال للقنوات المباشرة فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,141,خيار السماح بالإرسال للقنوات غير المباشرة إذا كانت القناة تسمح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,142,تحديد عدة حسابات أو قنوات دفعة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,143,إعدادات التزامن للإرسال المسموح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,144,سجل كامل لعمليات الإرسال.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,145,إنشاء عدة جداول إرسال مستقلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,146,تسمية كل جدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,147,اختيار الحساب لكل جدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,148,اختيار القنوات لكل جدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,149,تحديد وقت البداية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,150,تحديد وقت النهاية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,151,تحديد مدة التشغيل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,144,سجل كامل لعمليات الإرسال.,CODED_REQUIRES_LIVE_TEST,Locally saved bounded per-schedule activity log.
+A,145,إنشاء عدة جداول إرسال مستقلة.,CODED_FOREGROUND,Multiple independent schedules saved in IndexedDB.
+A,146,تسمية كل جدول.,CODED_FOREGROUND,Named schedules.
+A,147,اختيار الحساب لكل جدول.,CODED_FOREGROUND,Per-schedule linked account selection.
+A,148,اختيار القنوات لكل جدول.,CODED_FOREGROUND,Per-schedule channel selection (one per schedule).
+A,149,تحديد وقت البداية.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,"Local scheduled start, foreground-only."
+A,150,تحديد وقت النهاية.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Optional end time halts dispatch.
+A,151,تحديد مدة التشغيل.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,End time can limit window; no standalone duration selector.
 A,152,تحديد أيام التشغيل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,153,جدولة يومية وأسبوعية ومتكررة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,154,تحديد رسائل مستقلة لكل جدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,155,تحديد فاصل زمني مستقل لكل جدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,156,دعم الاختيار العشوائي للرسائل داخل الجدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,154,تحديد رسائل مستقلة لكل جدول.,CODED_FOREGROUND,Own newline-separated messages per schedule.
+A,155,تحديد فاصل زمني مستقل لكل جدول.,CODED_FOREGROUND,Own send interval 30–3600 seconds.
+A,156,دعم الاختيار العشوائي للرسائل داخل الجدول.,CODED_FOREGROUND,Random or ordered selection per schedule.
 A,157,تفعيل وتعطيل الجدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,158,إيقاف جدول محدد.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,159,استكمال جدول متوقف حسب حالته المحفوظة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,160,عرض التشغيل القادم.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,161,عرض آخر تشغيل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,162,عرض عدد الرسائل المرسلة في كل جدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,163,عرض عدد العمليات الفاشلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,158,إيقاف جدول محدد.,CODED_FOREGROUND,Stop or pause individual schedule.
+A,159,استكمال جدول متوقف حسب حالته المحفوظة.,CODED_FOREGROUND,Resume on explicit user action; never catch up automatically.
+A,160,عرض التشغيل القادم.,CODED_FOREGROUND,Next time shown while running.
+A,161,عرض آخر تشغيل.,CODED_FOREGROUND,Timestamped activity log.
+A,162,عرض عدد الرسائل المرسلة في كل جدول.,CODED_FOREGROUND,Accepted count per schedule.
+A,163,عرض عدد العمليات الفاشلة.,CODED_FOREGROUND,Failure count per schedule.
 A,164,تشغيل الجدولة من Backend.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,165,الاحتفاظ بالجداول بعد إغلاق المتصفح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,165,الاحتفاظ بالجداول بعد إغلاق المتصفح.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Schedules persist in IndexedDB; execution DOES NOT continue after tab closes.
 A,166,اكتشاف عمليات التشغيل الفائتة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,167,منع تنفيذ نفس المهمة مرتين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,167,منع تنفيذ نفس المهمة مرتين.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Web Locks per browser origin; local schedule version can still be stale across multiple devices.
 A,168,الاستفادة من Queue وCron وDurable Objects عند الحاجة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,169,تسجيل حالات اكتمال وفشل وإلغاء المهام.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,169,تسجيل حالات اكتمال وفشل وإلغاء المهام.,CODED_FOREGROUND,"Completed, stopped, paused and failed states, with logs."
 A,170,مراقبة القنوات المباشرة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,171,إشعار بدء البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,172,إشعار انتهاء البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
@@ -211,9 +211,9 @@ A,209,ردود تلقائية محددة بالقواعد.,NOT_IMPLEMENTED,No cl
 A,210,التحكم في Slow Mode عند توفير صلاحيات وواجهة مناسبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,211,منع الرسائل المكررة وفق قواعد الإشراف المصرح بها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,212,متابعة أحداث الاشتراكات والهدايا والمتابعات المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,213,مكتبة داخلية للرسائل والمجموعات.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,214,مكتبة ملاحظات.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,215,إنشاء وتعديل وحذف الملفات المحلية.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
+A,213,مكتبة داخلية للرسائل والمجموعات.,CODED_FOREGROUND,Message library retained.
+A,214,مكتبة ملاحظات.,CODED_FOREGROUND,Notes library retained.
+A,215,إنشاء وتعديل وحذف الملفات المحلية.,CODED_FOREGROUND,Local notes create/edit/delete retained.
 A,216,نسخ الملفات والملاحظات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,217,إضافة الملفات للمفضلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,218,البحث والتصفية داخل المكتبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
@@ -221,8 +221,8 @@ A,219,الحفظ التلقائي للتغييرات.,NOT_IMPLEMENTED,No claim o
 A,220,نسخ الرسائل بصيغة JSON.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
 A,221,لصق الرسائل من JSON.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,222,استيراد ملفات JSON.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,223,تصدير ملفات JSON.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,224,الاختيار بين الإضافة والاستبدال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
+A,223,تصدير ملفات JSON.,CODED_FOREGROUND,Local data JSON export retained.
+A,224,الاختيار بين الإضافة والاستبدال.,CODED_FOREGROUND,Local JSON import retained.
 A,225,مشاركة إعدادات القنوات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,226,مشاركة مجموعات الرسائل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
 A,227,مشاركة الملفات المحددة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
