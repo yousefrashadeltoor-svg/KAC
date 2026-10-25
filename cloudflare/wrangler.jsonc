@@ -1,0 +1,13 @@
+{
+  "name": "kac-background",
+  "main": "worker.js",
+  "compatibility_date": "2026-10-01",
+  "durable_objects": {
+    "bindings": [
+      { "name": "KAC_SCHEDULES", "class_name": "KacSchedule" }
+    ]
+  },
+  "migrations": [
+    { "tag": "kac-v4-initial", "new_sqlite_classes": ["KacSchedule"] }
+  ]
+}
