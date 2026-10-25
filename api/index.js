@@ -2,7 +2,7 @@
 /* KAC 2026 - Official Kick API serverless gateway, no dependencies. Node 20+. */
 const crypto = require('node:crypto');
 const KICK = 'https://api.kick.com', AUTH = 'https://id.kick.com';
-const SCOPE = 'user:read channel:read chat:write channel:rewards:read';
+const SCOPE = 'user:read channel:read chat:write events:subscribe';
 const enc = (x) => Buffer.from(x).toString('base64url');
 const rand = (n=32) => crypto.randomBytes(n).toString('base64url');
 const secret = () => {
@@ -41,20 +41,27 @@ async function readBody(req){if(req.body && typeof req.body==='object' && !Buffe
 async function outbound(url,{method='GET',headers={},body,timeout=11000}={}){
   const c=new AbortController(),t=setTimeout(()=>c.abort(),timeout);
   try{const r=await fetch(url,{method,headers,body,signal:c.signal,redirect:'error'});
-    const raw=await r.text();let data;try{data=JSON.parse(raw)}catch{data={message:raw.slice(0,180)}};
+    const raw=await r.text();let data;try{data=JSON.parse(raw)}catch{data=raw.includes('BEGIN PUBLIC KEY')?{public_key:raw}:{message:raw.slice(0,180)}};
     if(!r.ok){const x=err((data?.message||data?.error_description||data?.error||`Kick HTTP ${r.status}`).toString().slice(0,250),r.status===429?429:r.status===401?401:r.status===403?403:r.status===404?404:502);x.upstreamStatus=r.status;throw x}
     return data;
   }catch(e){if(e.name==='AbortError')throw err('انتهت مهلة اتصال Kick؛ نتيجة العملية غير مؤكدة، لن نعيد الإرسال تلقائيًا.',504);throw e}finally{clearTimeout(t)}
 }
-let appCache={token:'',exp:0};
+let appCache={token:'',exp:0},appTokenFlight=null;
 const localSendCooldown=new Map(); // Best effort per instance; Redis is needed for distributed protection.
 async function appToken(){if(appCache.exp>Date.now()+30000)return appCache.token;
-  if(!process.env.KICK_CLIENT_ID||!process.env.KICK_CLIENT_SECRET)throw err('لم يتم ضبط مفاتيح تطبيق Kick على السيرفر.',503);
-  const b=new URLSearchParams({grant_type:'client_credentials',client_id:process.env.KICK_CLIENT_ID,client_secret:process.env.KICK_CLIENT_SECRET});
-  const r=await outbound(AUTH+'/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:b.toString()});
-  if(!r.access_token)throw err('لم يرجع Kick توكن التطبيق',502);appCache={token:r.access_token,exp:Date.now()+(Number(r.expires_in)||600)*1000};return r.access_token;
-}
-async function kickGet(path,token){return outbound(KICK+path,{headers:{Authorization:'Bearer '+token,Accept:'application/json'}})}
+ if(appTokenFlight)return appTokenFlight;
+ appTokenFlight=(async()=>{if(!process.env.KICK_CLIENT_ID||!process.env.KICK_CLIENT_SECRET)throw err('مفاتيح Kick غير مضبوطة',503);
+ const b=new URLSearchParams({grant_type:'client_credentials',client_id:process.env.KICK_CLIENT_ID,client_secret:process.env.KICK_CLIENT_SECRET});
+ const r=await outbound(AUTH+'/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:b.toString()});
+ if(!r.access_token)throw err('لم يرجع Kick توكن التطبيق',502);appCache={token:r.access_token,exp:Date.now()+(Number(r.expires_in)||600)*1000};return appCache.token;
+ })();try{return await appTokenFlight}finally{appTokenFlight=null}}
+
+async function kickGet(path,token){let failure;
+ for(let attempt=0;attempt<2;attempt++){
+  try{return await outbound(KICK+path,{headers:{Authorization:'Bearer '+token,Accept:'application/json'}})}
+  catch(e){failure=e;if(attempt>0||![502,503,504].includes(e.status))throw e;await new Promise(r=>setTimeout(r,400))}
+ }throw failure}
+
 async function kickPost(path,token,value){return outbound(KICK+path,{method:'POST',headers:{Authorization:'Bearer '+token,Accept:'application/json','Content-Type':'application/json'},body:JSON.stringify(value)})}
 const normalizeSlug = s => {let v=String(s||'').trim();if(/\s/.test(v))return '';v=v.replace(/^https?:\/\/(?:www\.)?kick\.com\//i,'').replace(/^@/,'').split(/[\/?#\s]/)[0].toLowerCase();return /^[a-z0-9_-]{1,25}$/.test(v)?v:''};
 const SESSION_TTL=30*86400;
@@ -171,8 +178,11 @@ async function backgroundExecute(req,res){sharedAuth(req);if(req.method!=='POST'
  if(j.endAt&&now>=j.endAt){j.status='stopped';await persistJob(sid,j);return json(res,200,{ok:true,running:false,reason:'time ended'})}
  if(j.count!==null&&j.attempted>=j.count){j.status='completed';await persistJob(sid,j);return json(res,200,{ok:true,running:false})}
  const k='kac:joblock:'+sid+':'+id;
- if(await redis('SET',k,'1','EX',40,'NX')!=='OK')return json(res,200,{ok:true,running:true,nextAt:Date.now()+15000});
- if(j.inflight){j.status='paused';j.lastError='طلب سابق نتيجته غير مؤكدة؛ أوقف الجدول لمراجعة السجل';await persistJob(sid,j);return json(res,200,{ok:true,running:false,reason:j.lastError})}
+ const lockValue=rand(20);
+ if(await redis('SET',k,lockValue,'EX',40,'NX')!=='OK')return json(res,200,{ok:true,running:true,nextAt:Date.now()+2500});
+ if(j.inflight){j.status='paused';j.lastError='طلب سابق نتيجته غير مؤكدة؛ أوقف الجدول لمراجعة السجل';await persistJob(sid,j);
+   await redis('EVAL',"if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) else return 0 end",1,k,lockValue);
+   return json(res,200,{ok:true,running:false,reason:j.lastError})}
  j.startedAt ||= Date.now();const ix=j.mode==='random'?crypto.randomInt(j.messages.length):j.index%j.messages.length,content=j.messages[ix];
  j.index++;j.attempted++;j.inflight=true;j.nextAt=null;j.status='running';await persistJob(sid,j);
  try{
@@ -196,7 +206,10 @@ async function backgroundExecute(req,res){sharedAuth(req);if(req.method!=='POST'
  }finally{
   j.inflight=false;const latest=await loadPersistedJob(sid,id);
   if(latest&&['paused','stopped'].includes(latest.status)){j.status=latest.status;j.nextAt=null}
+  j.log=(j.log||[]).concat(new Date().toISOString()+' · '+(j.status==='failed'?j.lastError:'تمت معالجة محاولة الإرسال')).slice(-35);
   await persistJob(sid,j);await saveForSid(s);
+  // Release only our own lock; otherwise every 3s job would stall for 40s.
+  try{await redis('EVAL',"if redis.call('GET',KEYS[1])==ARGV[1] then return redis.call('DEL',KEYS[1]) else return 0 end",1,k,lockValue)}catch(e){console.error('schedule lock release failed:',e.message)}
  }
  return json(res,200,{ok:true,running:j.status==='running',nextAt:j.nextAt||null,status:j.status});
 }
@@ -230,14 +243,23 @@ module.exports=async(req,res)=>{
     const action=url.searchParams.get('action')||'health';
     if(action==='webhook')return await handleWebhook(req,res);
     if(!['GET','POST'].includes(req.method))throw err('غير مسموح',405);
-    if(action==='health')return json(res,200,{ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v5'});
+    if(action==='health')return json(res,200,{ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v6'});
+    if(action==='fonts'){
+      if(req.method!=='GET')throw err('غير مسموح',405);
+      // Repository is deliberately fixed. No arbitrary URL inputs / SSRF.
+      const gh='https://api.github.com/repos/yousefrashadeltoor-svg/KAC/contents/font?ref=main';
+      let rows=[];try{const r=await outbound(gh,{headers:{Accept:'application/vnd.github+json','User-Agent':'KAC-Font-Discovery'},timeout:8000});rows=Array.isArray(r)?r:[]}catch(e){if(e.status!==404)throw e}
+      const names=rows.filter(f=>f.type==='file'&&/\.(ttf|otf|woff|woff2)$/i.test(f.name||'')&&/^https:\/\/raw\.githubusercontent\.com\//.test(String(f.download_url||''))).slice(0,80)
+        .map(f=>({name:String(f.name).slice(0,180),url:String(f.download_url)}));
+      return json(res,200,{ok:true,fonts:names});
+    }
     if(action==='background_execute')return await backgroundExecute(req,res);
     let s=await loadSession(req);
     if(action==='diagnostics'){
       if(req.method!=='GET')throw err('method',405);
-      const out={ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v5',kick:{ok:false},redis:{ok:false},worker:{ok:false}};
+      const out={ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v6',kick:{ok:false},redis:{ok:false},worker:{ok:false}};
       if(!process.env.KICK_CLIENT_ID||!process.env.KICK_CLIENT_SECRET)out.kick.error='بيانات Kick غير مكتملة';
-      else try{const token=await appToken();const v=await outbound(AUTH+'/oauth/token/introspect',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/x-www-form-urlencoded'},timeout:7000});out.kick={ok:v?.data?.active===true,error:v?.data?.active===true?undefined:'Kick لم يؤكد أن توكن التطبيق نشط'}}catch(e){out.kick.error='تعذّر الحصول على توكن Kick: '+String(e.message||'').slice(0,90)}
+      else try{const token=await appToken();const v=await outbound(AUTH+'/oauth/token/introspect',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/x-www-form-urlencoded'},timeout:7000});out.kick={ok:v?.data?.active===true||v?.active===true,error:(v?.data?.active===true||v?.active===true)?undefined:'Kick لم يؤكد أن توكن التطبيق نشط'}}catch(e){out.kick.error='تعذّر الحصول على توكن Kick: '+String(e.message||'').slice(0,90)}
       if(!redisEnabled())out.redis.error='Upstash غير مضبوطة';
       else try{const r=await redis('PING');out.redis={ok:r==='PONG',error:r==='PONG'?undefined:'Redis لم يرجع PONG'}}catch(e){out.redis.error='فشل الاتصال بـRedis: '+String(e.message||'').slice(0,90)}
       if(!process.env.BACKGROUND_WORKER_URL||!process.env.BACKGROUND_WORKER_SECRET)out.worker.error='متغيرات Cloudflare ناقصة';
@@ -270,7 +292,18 @@ module.exports=async(req,res)=>{
     }
     if(action==='me'){
       if(req.method!=='GET')throw err('غير مسموح',405);
-      if(s.accounts?.length){let changed=false;for(const a of s.accounts){if(a.refresh_token&&a.expires<Date.now()+15*60*1000){try{await accountToken(s,a.id);changed=true}catch(e){a.lastRefreshError=e.message}}}if(changed)await saveSession(res,s);if(backgroundEnabled()&&s._sid){try{await workerControl(s._sid,'session_refresh',true,Date.now()+1800000)}catch(e){/* renewal on next authenticated call remains available */}}}
+      if(s.accounts?.length){let changed=false;
+        for(const a of s.accounts){
+          if(a.refresh_token&&a.expires<Date.now()+15*60*1000){try{await accountToken(s,a.id);changed=true}catch(e){a.lastRefreshError=e.message}}
+          if(a.expires>Date.now()+10000&&(!a.profileCheckedAt||Date.now()-a.profileCheckedAt>20000)){
+            try{const u=await kickGet('/public/v1/users',a.access_token);const user=Array.isArray(u.data)?u.data[0]:u.data||{};
+              if(String(user.user_id||user.id||'')===String(a.id)){a.username=user.name||user.username||a.username;a.avatar=user.profile_picture||user.profile_pic||a.avatar;a.profileCheckedAt=Date.now();changed=true}
+            }catch(e){a.profileCheckedAt=Date.now();changed=true;a.lastProfileError=String(e.message||'').slice(0,90)}
+          }
+        }
+        if(changed)await saveSession(res,s);
+        if(backgroundEnabled()&&s._sid){try{await workerControl(s._sid,'session_refresh',true,Date.now()+1800000)}catch(e){}}
+      }
       return json(res,200,{ok:true,accounts:publicAccounts(s),csrf:s.csrf,chatStorage:redisEnabled(),background:backgroundEnabled()});
     }
 
@@ -379,7 +412,7 @@ module.exports=async(req,res)=>{
       const a=await accountToken(s,account);if(!String(a.scope||'').split(/\s+/).includes('chat:write'))throw err('حسابك لم يمنح صلاحية chat:write',403);
       const ch=await kickGet('/public/v1/channels?slug='+encodeURIComponent(slug),await appToken());const item=ch.data?.[0];const broadcaster=Number(item?.broadcaster_user_id);
       if(!Number.isSafeInteger(broadcaster)||broadcaster<=0)throw err('لم يرجع Kick معرّف القناة الصحيح',502);
-      const reply=String(b.reply_to_message_id||'');if(reply&&!/^[0-9a-fA-F-]{32,36}$/.test(reply))throw err('معرّف الرد غير صحيح');
+      const reply=String(b.reply_to_message_id||'');if(reply&&!/^[a-zA-Z0-9_-]{8,120}$/.test(reply))throw err('معرّف الرد غير صحيح');
       const lockKey=account+':'+broadcaster;
       if(redisEnabled()){
         const k='kac:sendlock:'+lockKey;
@@ -409,7 +442,7 @@ module.exports=async(req,res)=>{
       const broadcaster=Number(ch.data?.[0]?.broadcaster_user_id);if(!broadcaster)throw err('القناة غير موجودة',404);
       const old=await kickGet('/public/v1/events/subscriptions?broadcaster_user_id='+broadcaster,t);
       const existing=Array.isArray(old.data)?old.data:[];
-      const needed=['chat.message.sent','livestream.status.updated'].filter(n=>!existing.some(x=>x.event===n&&Number(x.version)===1));
+      const needed=['chat.message.sent','livestream.status.updated'].filter(n=>!existing.some(x=>(x.event===n||x.name===n||x.event_type===n)&&Number(x.version)===1));
       if(!needed.length)return json(res,200,{ok:true,already:true,subscriptions:existing});
       const x=await kickPost('/public/v1/events/subscriptions',t,{broadcaster_user_id:broadcaster,method:'webhook',events:needed.map(name=>({name,version:1}))});
       return json(res,200,{ok:true,subscriptions:x.data||[]});
