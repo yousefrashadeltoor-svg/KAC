@@ -113,7 +113,7 @@ async function handleWebhook(req,res){
   const broadcaster=Number(b?.broadcaster?.user_id||b?.broadcaster_user_id||0);
   if(!Number.isSafeInteger(broadcaster)||broadcaster<=0)return json(res,200,{ok:true,ignored:true});
   if(['chat.message.sent','livestream.status.updated','livestream.metadata.updated'].includes(typ)){
-    const msg={id:String(b.message_id||id),kind:typ,timestamp:b.created_at||ts,sender:b.sender||{},content:String(b.content||''),replies_to:b.replies_to||null,stream:b.is_live===true?true:b.is_live===false?false:null,title:String(b.title||'')};
+    const msg={id:String(b.message_id||id),kind:typ,timestamp:b.created_at||ts,sender:b.sender||{},content:String(b.content||''),replies_to:b.replies_to||null,emotes:Array.isArray(b.emotes)?b.emotes.slice(0,100):[],stream:b.is_live===true?true:b.is_live===false?false:null,title:String(b.title||'')};
     const lua="if redis.call('SET',KEYS[1],'1','EX',86400,'NX') then redis.call('LPUSH',KEYS[2],ARGV[1]); redis.call('LTRIM',KEYS[2],0,349); redis.call('EXPIRE',KEYS[2],172800); return 1 else return 0 end";
     const inserted=await redis('EVAL',lua,2,'kac:event:'+id,'kac:chat:'+broadcaster,JSON.stringify(msg));
     return json(res,200,{ok:true,duplicate:inserted===0});
@@ -138,7 +138,7 @@ function validateJob(b){
  if(!Number.isSafeInteger(interval)||interval<3000||interval>3600000||!Number.isSafeInteger(lo)||lo<3000||lo>3600000||!Number.isSafeInteger(hi)||hi<lo||hi>3600000)throw err('الفاصل من 3 إلى 3600 ثانية');
  const count=b.count===null?null:Number(b.count);
  if(count!==null&&(!Number.isSafeInteger(count)||count<1||count>1000000))throw err('عدد الرسائل غير صحيح');
- return {id:String(b.id),name:String(b.name||'جدول').slice(0,80),account:String(b.account),slug,messages:messages.map(x=>x.trim()),mode:b.mode==='random'?'random':'ordered',intervalMs:interval,randomDelay:b.randomDelay===true,delayMinMs:lo,delayMaxMs:hi,count,startAt:b.startAt===null?null:Number(b.startAt)||Date.now(),endAt:b.endAt?Number(b.endAt):null,createdAt:Number(b.createdAt)||Date.now(),sent:0,failed:0,uncertain:0,attempted:0,index:0,status:'draft',nextAt:null,log:[],inflight:false,lastError:''};
+ return {id:String(b.id),name:String(b.name||'جدول').slice(0,80),account:String(b.account),slug,messages:messages.map(x=>x.trim()),mode:b.mode==='random'?'random':'ordered',intervalMs:interval,randomDelay:b.randomDelay===true,delayMinMs:lo,delayMaxMs:hi,count,startAt:b.startAt===null?null:Number(b.startAt)||Date.now(),endAt:b.endAt?Number(b.endAt):null,createdAt:Number(b.createdAt)||Date.now(),sent:0,failed:0,uncertain:0,attempted:0,index:0,status:'draft',nextAt:null,log:[],inflight:false,lastError:'',sendOffline:b.sendOffline===true,startedAt:Number(b.startedAt)||null,parentPaused:false};
 }
 async function loadPersistedJob(sid,id){const raw=await redis('GET',jobKey(sid,id));if(!raw)return null;try{return JSON.parse(raw)}catch{return null}}
 async function persistJob(sid,j){await redis('SET',jobKey(sid,j.id),JSON.stringify(j),'EX',SESSION_TTL);await redis('SADD','kac:jobs:'+sid,j.id);await redis('EXPIRE','kac:jobs:'+sid,SESSION_TTL)}
@@ -173,13 +173,18 @@ async function backgroundExecute(req,res){sharedAuth(req);if(req.method!=='POST'
  const k='kac:joblock:'+sid+':'+id;
  if(await redis('SET',k,'1','EX',40,'NX')!=='OK')return json(res,200,{ok:true,running:true,nextAt:Date.now()+15000});
  if(j.inflight){j.status='paused';j.lastError='طلب سابق نتيجته غير مؤكدة؛ أوقف الجدول لمراجعة السجل';await persistJob(sid,j);return json(res,200,{ok:true,running:false,reason:j.lastError})}
- const ix=j.mode==='random'?crypto.randomInt(j.messages.length):j.index%j.messages.length,content=j.messages[ix];
+ j.startedAt ||= Date.now();const ix=j.mode==='random'?crypto.randomInt(j.messages.length):j.index%j.messages.length,content=j.messages[ix];
  j.index++;j.attempted++;j.inflight=true;j.nextAt=null;j.status='running';await persistJob(sid,j);
  try{
   const a=await accountToken(s,j.account);
   if(!String(a.scope||'').split(/\s+/).includes('chat:write'))throw err('صلاحية chat:write غير متاحة',403);
-  const t=await appToken(),ch=await kickGet('/public/v1/channels?slug='+encodeURIComponent(j.slug),t),br=Number(ch.data?.[0]?.broadcaster_user_id);
+  const t=await appToken(),ch=await kickGet('/public/v1/channels?slug='+encodeURIComponent(j.slug),t),channel=ch.data?.[0],br=Number(channel?.broadcaster_user_id);
   if(!Number.isSafeInteger(br)||br<=0)throw err('قناة غير متاحة');
+  if(j.sendOffline!==true&&channel?.stream?.is_live!==true){
+    j.index=Math.max(0,j.index-1);j.attempted=Math.max(0,j.attempted-1);j.status='running';j.nextAt=Date.now()+90000;
+    // No message sent and no failure: schedule a later, server-confirmed live-status check.
+    return json(res,200,{ok:true,running:true,nextAt:j.nextAt,status:'waiting_for_live'});
+  }
   const lock='kac:sendlock:'+j.account+':'+br;
   if(await redis('SET',lock,'1','EX',3,'NX')!=='OK')throw err('الفاصل بين الرسائل غير كافٍ للقناة',429);
   const r=await kickPost('/public/v1/chat',a.access_token,{type:'user',broadcaster_user_id:br,content});
@@ -225,9 +230,21 @@ module.exports=async(req,res)=>{
     const action=url.searchParams.get('action')||'health';
     if(action==='webhook')return await handleWebhook(req,res);
     if(!['GET','POST'].includes(req.method))throw err('غير مسموح',405);
-    if(action==='health')return json(res,200,{ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v4'});
+    if(action==='health')return json(res,200,{ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v5'});
     if(action==='background_execute')return await backgroundExecute(req,res);
     let s=await loadSession(req);
+    if(action==='diagnostics'){
+      if(req.method!=='GET')throw err('method',405);
+      const out={ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v5',kick:{ok:false},redis:{ok:false},worker:{ok:false}};
+      if(!process.env.KICK_CLIENT_ID||!process.env.KICK_CLIENT_SECRET)out.kick.error='بيانات Kick غير مكتملة';
+      else try{const token=await appToken();const v=await outbound(AUTH+'/oauth/token/introspect',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/x-www-form-urlencoded'},timeout:7000});out.kick={ok:v?.data?.active===true,error:v?.data?.active===true?undefined:'Kick لم يؤكد أن توكن التطبيق نشط'}}catch(e){out.kick.error='تعذّر الحصول على توكن Kick: '+String(e.message||'').slice(0,90)}
+      if(!redisEnabled())out.redis.error='Upstash غير مضبوطة';
+      else try{const r=await redis('PING');out.redis={ok:r==='PONG',error:r==='PONG'?undefined:'Redis لم يرجع PONG'}}catch(e){out.redis.error='فشل الاتصال بـRedis: '+String(e.message||'').slice(0,90)}
+      if(!process.env.BACKGROUND_WORKER_URL||!process.env.BACKGROUND_WORKER_SECRET)out.worker.error='متغيرات Cloudflare ناقصة';
+      else try{const r=await outbound(new URL(process.env.BACKGROUND_WORKER_URL).href,{method:'POST',headers:{'Content-Type':'application/json','x-kac-worker-secret':process.env.BACKGROUND_WORKER_SECRET},body:JSON.stringify({action:'probe'}),timeout:7000});out.worker={ok:r.ok===true&&r.durableObject===true,error:r.ok===true&&r.durableObject===true?undefined:'Worker أو Durable Objects غير جاهزين'}}catch(e){out.worker.error='فشل الاتصال بـWorker: '+String(e.message||'').slice(0,90)}
+      return json(res,200,out);
+    }
+
     if(action==='auth'){
       if(req.method!=='GET')throw err('غير مسموح',405);
       if(!process.env.KICK_CLIENT_ID||!process.env.KICK_CLIENT_SECRET)throw err('أدخل مفاتيح Kick في إعدادات Vercel أولًا',503);
@@ -315,18 +332,19 @@ module.exports=async(req,res)=>{
       if(command==='create'){
         if(j)throw err('الجدول محفوظ بالفعل؛ استخدم أوامر التشغيل أو الإيقاف',409);
         j=validateJob(b.job);if(!(s.accounts||[]).some(a=>String(a.id)===j.account))throw err('الحساب غير متصل',401);
-        if(b.job.status==='running'){j.status='running';j.nextAt=Date.now()+1500}
+        if(b.job.status==='running'){j.status='running';j.nextAt=Date.now()+1500;j.startedAt=Date.now()}
         else if(b.job.status==='pending'&&Number.isFinite(b.job.startAt)){j.status='pending';j.nextAt=Number(b.job.startAt)}
       }else if(!j)throw err('الجدول غير موجود على الخادم',404);
       else if(command==='delete'){
         await workerControl(s._sid,id,false);await redis('DEL',jobKey(s._sid,id));await redis('SREM','kac:jobs:'+s._sid,id);
         return json(res,200,{ok:true,deleted:true});
-      }else if(['pause','stop'].includes(command)){j.status=command==='pause'?'paused':'stopped';j.nextAt=null}
+      }else if(['pause','stop'].includes(command)){j.status=command==='pause'?'paused':'stopped';j.nextAt=null;j.parentPaused=b.job?.parentPaused===true}
+      else if(command==='options'){j.sendOffline=b.job?.sendOffline===true;if(j.status==='running')j.nextAt=Date.now()+1500}
       else if(command==='start'){
         if(j.inflight)throw err('هناك طلب سابق قيد المعالجة؛ راجع حالته قبل البدء',409);
         if(j.count!==null&&j.attempted>=j.count)throw err('الجدول انتهى عدد رسائله',409);
         if(j.endAt&&j.endAt<=Date.now())throw err('انتهى الوقت المحدد للجدول',409);
-        j.status='running';j.nextAt=Date.now()+1500;
+        j.status='running';j.nextAt=Date.now()+1500;j.startedAt ||= Date.now();j.parentPaused=false;
       }else throw err('الأمر غير مدعوم');
       await persistJob(s._sid,j);
       try{await workerControl(s._sid,id,['running','pending'].includes(j.status),j.nextAt)}catch(e){j.status='paused';j.lastError='تعذّر تسجيل مشغل الخلفية: '+e.message;await persistJob(s._sid,j);throw e}
