@@ -45,6 +45,7 @@ export default {
     const expected=String(env.BACKGROUND_WORKER_SECRET||'');
     if(expected.length<32||!equal(String(request.headers.get('x-kac-worker-secret')||''),expected))return response({ok:false,error:'Forbidden'},403);
     const b=await request.json().catch(()=>null);
+    if(b?.action==='probe')return response({ok:true,durableObject:!!env.KAC_SCHEDULES&&typeof env.KAC_SCHEDULES.idFromName==='function'});
     if(!b||!goodId(b.sid)||!goodId(b.id)||typeof b.active!=='boolean')return response({ok:false,error:'Invalid payload'},400);
     const key=env.KAC_SCHEDULES.idFromName(b.sid+'/'+b.id);
     const stub=env.KAC_SCHEDULES.get(key);
