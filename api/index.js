@@ -35,7 +35,7 @@ function err(message,status=400){return Object.assign(new Error(message),{status
 function safeOrigin(req){const origin=req.headers.origin;const host=req.headers.host;if(origin && new URL(origin).host!==host)throw err('Origin غير مسموح',403)}
 function requireCsrf(req,s){safeOrigin(req);if(!s||!s.csrf||req.headers['x-kac-csrf']!==s.csrf)throw err('انتهت صلاحية جلسة الحماية. حدّث الصفحة.',403)}
 async function readBody(req){if(req.body && typeof req.body==='object' && !Buffer.isBuffer(req.body))return req.body;
-  const raw=await new Promise((resolve,reject)=>{let d='';req.on('data',c=>{d+=c;if(d.length>16000){reject(err('البيانات أكبر من المسموح',413));req.destroy()}});req.on('end',()=>resolve(d));req.on('error',reject)});
+  const raw=await new Promise((resolve,reject)=>{let d='';req.on('data',c=>{d+=c;if(d.length>1600000){reject(err('البيانات أكبر من المسموح',413));req.destroy()}});req.on('end',()=>resolve(d));req.on('error',reject)});
   try{return JSON.parse(raw||'{}')}catch{throw err('JSON غير صالح',400)}
 }
 async function outbound(url,{method='GET',headers={},body,timeout=11000}={}){
@@ -57,9 +57,31 @@ async function appToken(){if(appCache.exp>Date.now()+30000)return appCache.token
 async function kickGet(path,token){return outbound(KICK+path,{headers:{Authorization:'Bearer '+token,Accept:'application/json'}})}
 async function kickPost(path,token,value){return outbound(KICK+path,{method:'POST',headers:{Authorization:'Bearer '+token,Accept:'application/json','Content-Type':'application/json'},body:JSON.stringify(value)})}
 const normalizeSlug = s => {let v=String(s||'').trim();if(/\s/.test(v))return '';v=v.replace(/^https?:\/\/(?:www\.)?kick\.com\//i,'').replace(/^@/,'').split(/[\/?#\s]/)[0].toLowerCase();return /^[a-z0-9_-]{1,25}$/.test(v)?v:''};
-function saveSession(res,s){s.exp=Date.now()+30*86400000;const v=seal(s);
-  if(v.length>3750)throw err('وصلت الجلسة للحد المناسب للكوكيز. دعم عدد أكبر من الحسابات يحتاج قاعدة بيانات للجلسات.',413);
-  setCookie(res,'kac_session',v,30*86400)}
+const SESSION_TTL=30*86400;
+async function loadSession(req){
+  const sid=cookie(req,'kac_sid');
+  if(redisEnabled()&&/^[A-Za-z0-9_-]{24,100}$/.test(sid)){
+    const packed=await redis('GET','kac:session:'+sid);
+    const active=unseal(packed);
+    if(active){active._sid=sid;return active}
+    // Never trust a stale session cookie: rotate CSRF rather than reusing an expired session.
+  }
+  return unseal(cookie(req,'kac_session'))||{accounts:[],csrf:rand(24)};
+}
+async function saveSession(res,s){
+  s.exp=Date.now()+SESSION_TTL*1000;
+  if(redisEnabled()){
+    const sid=s._sid||rand(32);delete s._sid;
+    const packed=seal(s);
+    await redis('SET','kac:session:'+sid,packed,'EX',SESSION_TTL);
+    s._sid=sid;setCookie(res,'kac_sid',sid,SESSION_TTL);
+    setCookie(res,'kac_session','',0);
+    return;
+  }
+  const v=seal(s);
+  if(v.length>3750)throw err('جلسة الحسابات امتلأت؛ فعّل Upstash Redis لاستيعاب حسابات أكثر بأمان.',413);
+  setCookie(res,'kac_session',v,SESSION_TTL);
+}
 async function accountToken(s,account){const a=(s?.accounts||[]).find(x=>String(x.id)===String(account));if(!a)throw err('اختار حساب متصل أولاً',401);
   if(a.expires>Date.now()+60000)return a;
   if(!a.refresh_token)throw err('جلسة Kick انتهت؛ سجّل دخولك تاني',401);
@@ -68,7 +90,7 @@ async function accountToken(s,account){const a=(s?.accounts||[]).find(x=>String(
   if(!d.access_token)throw err('فشل تجديد صلاحية الحساب',401);
   a.access_token=d.access_token;a.refresh_token=d.refresh_token||a.refresh_token;a.expires=Date.now()+Number(d.expires_in||3600)*1000;a.scope=d.scope||a.scope;return a;
 }
-function publicAccounts(s){return (s.accounts||[]).map(a=>({id:a.id,username:a.username,avatar:a.avatar||'',expires:a.expires,scope:a.scope}));}
+function publicAccounts(s){return (s.accounts||[]).map(a=>({id:a.id,username:a.username,avatar:a.avatar||'',expires:a.expires,scope:a.scope,renewable:!!a.refresh_token}));}
 async function redis(...args){const base=process.env.UPSTASH_REDIS_REST_URL,token=process.env.UPSTASH_REDIS_REST_TOKEN;
   if(!base||!token)throw err('الشات المباشر يحتاج إعداد تخزين Redis وإشعارات Kick Webhooks.',503);
   const r=await outbound(base.replace(/\/$/,'')+'/',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify(args),timeout:7000});
@@ -98,6 +120,103 @@ async function handleWebhook(req,res){
   }
   return json(res,200,{ok:true,ignored:true});
 }
+
+// Background scheduler: Redis is authoritative, Cloudflare Durable Object alarms wake jobs.
+// Tokens remain encrypted on Vercel; the Worker receives only opaque session/job IDs.
+const jobKey=(sid,id)=>'kac:job:'+sid+':'+id;
+const validId=id=>/^[a-zA-Z0-9_-]{12,120}$/.test(String(id||''));
+const backgroundEnabled=()=>redisEnabled()&&!!(process.env.BACKGROUND_WORKER_URL&&process.env.BACKGROUND_WORKER_SECRET);
+function sharedAuth(req){
+ const provided=String(req.headers['x-kac-worker-secret']||'');const expected=String(process.env.BACKGROUND_WORKER_SECRET||'');
+ if(!expected||expected.length<32||provided.length!==expected.length||!crypto.timingSafeEqual(Buffer.from(provided),Buffer.from(expected)))throw err('غير مصرح',403);
+}
+function validateJob(b){
+ if(!b||typeof b!=='object'||!validId(b.id)||!/^[0-9]{1,24}$/.test(String(b.account||'')))throw err('بيانات جدول غير صحيحة');
+ const slug=normalizeSlug(b.slug),messages=Array.isArray(b.messages)?b.messages:[];
+ if(!slug||messages.length<1||messages.length>100||messages.some(t=>typeof t!=='string'||!t.trim()||[...t].length>500||Buffer.byteLength(t)>2048))throw err('رسائل الجدول غير صالحة');
+ const interval=Number(b.intervalMs),lo=Number(b.delayMinMs),hi=Number(b.delayMaxMs);
+ if(!Number.isSafeInteger(interval)||interval<3000||interval>3600000||!Number.isSafeInteger(lo)||lo<3000||lo>3600000||!Number.isSafeInteger(hi)||hi<lo||hi>3600000)throw err('الفاصل من 3 إلى 3600 ثانية');
+ const count=b.count===null?null:Number(b.count);
+ if(count!==null&&(!Number.isSafeInteger(count)||count<1||count>1000000))throw err('عدد الرسائل غير صحيح');
+ return {id:String(b.id),name:String(b.name||'جدول').slice(0,80),account:String(b.account),slug,messages:messages.map(x=>x.trim()),mode:b.mode==='random'?'random':'ordered',intervalMs:interval,randomDelay:b.randomDelay===true,delayMinMs:lo,delayMaxMs:hi,count,startAt:b.startAt===null?null:Number(b.startAt)||Date.now(),endAt:b.endAt?Number(b.endAt):null,createdAt:Number(b.createdAt)||Date.now(),sent:0,failed:0,uncertain:0,attempted:0,index:0,status:'draft',nextAt:null,log:[],inflight:false,lastError:''};
+}
+async function loadPersistedJob(sid,id){const raw=await redis('GET',jobKey(sid,id));if(!raw)return null;try{return JSON.parse(raw)}catch{return null}}
+async function persistJob(sid,j){await redis('SET',jobKey(sid,j.id),JSON.stringify(j),'EX',SESSION_TTL);await redis('SADD','kac:jobs:'+sid,j.id);await redis('EXPIRE','kac:jobs:'+sid,SESSION_TTL)}
+async function workerControl(sid,id,active,nextAt){
+ if(!backgroundEnabled())throw err('ربط مشغل Cloudflare مطلوب لاستمرار الجدولة بالخلفية',503);
+ const base=new URL(process.env.BACKGROUND_WORKER_URL);
+ if(base.protocol!=='https:')throw err('BACKGROUND_WORKER_URL must use HTTPS',503);
+ const r=await outbound(base.href,{method:'POST',headers:{'Content-Type':'application/json','x-kac-worker-secret':process.env.BACKGROUND_WORKER_SECRET},body:JSON.stringify({sid,id,active:!!active,nextAt:nextAt||Date.now()}),timeout:12000});
+ if(r.ok!==true)throw err('مشغل الخلفية لم يقبل الجدول',502);
+}
+async function loadFromSid(sid){if(!redisEnabled()||!/^[A-Za-z0-9_-]{24,100}$/.test(String(sid||'')))throw err('جلسة غير صالحة',401);
+ const packed=await redis('GET','kac:session:'+sid);const s=unseal(packed);if(!s)throw err('انتهت صلاحية الجلسة',401);s._sid=sid;return s}
+async function saveForSid(s){const sid=s._sid;if(!sid)throw err('جلسة بلا تخزين',503);
+ const out={...s};delete out._sid;out.exp=Date.now()+SESSION_TTL*1000;
+ await redis('SET','kac:session:'+sid,seal(out),'EX',SESSION_TTL);
+}
+function randDelay(j){const lo=j.randomDelay?j.delayMinMs:j.intervalMs,hi=j.randomDelay?j.delayMaxMs:j.intervalMs;
+ return lo===hi?lo:lo+crypto.randomInt(0,hi-lo+1)}
+async function backgroundExecute(req,res){sharedAuth(req);if(req.method!=='POST')throw err('method',405);const b=await readBody(req),sid=String(b.sid||''),id=String(b.id||'');
+ if(!validId(id))throw err('معرّف غير صالح');const s=await loadFromSid(sid);
+ if(id==='session_refresh'){
+  if(!s.accounts?.length)return json(res,200,{ok:true,running:false,reason:'no accounts'});
+  let renewed=0;for(const a of s.accounts||[]){if(a.refresh_token&&a.expires<Date.now()+45*60*1000){try{await accountToken(s,a.id);renewed++}catch(e){a.lastRefreshError=e.message}}}
+  await saveForSid(s);return json(res,200,{ok:true,running:true,nextAt:Date.now()+30*60*1000,renewed});
+ }
+ const j=await loadPersistedJob(sid,id);
+ if(!j)return json(res,200,{ok:true,running:false,reason:'deleted'});
+ if(!['running','pending'].includes(j.status))return json(res,200,{ok:true,running:false,reason:j.status});
+ const now=Date.now();if(j.nextAt&&now+250<j.nextAt)return json(res,200,{ok:true,running:true,nextAt:j.nextAt});
+ if(j.endAt&&now>=j.endAt){j.status='stopped';await persistJob(sid,j);return json(res,200,{ok:true,running:false,reason:'time ended'})}
+ if(j.count!==null&&j.attempted>=j.count){j.status='completed';await persistJob(sid,j);return json(res,200,{ok:true,running:false})}
+ const k='kac:joblock:'+sid+':'+id;
+ if(await redis('SET',k,'1','EX',40,'NX')!=='OK')return json(res,200,{ok:true,running:true,nextAt:Date.now()+15000});
+ if(j.inflight){j.status='paused';j.lastError='طلب سابق نتيجته غير مؤكدة؛ أوقف الجدول لمراجعة السجل';await persistJob(sid,j);return json(res,200,{ok:true,running:false,reason:j.lastError})}
+ const ix=j.mode==='random'?crypto.randomInt(j.messages.length):j.index%j.messages.length,content=j.messages[ix];
+ j.index++;j.attempted++;j.inflight=true;j.nextAt=null;j.status='running';await persistJob(sid,j);
+ try{
+  const a=await accountToken(s,j.account);
+  if(!String(a.scope||'').split(/\s+/).includes('chat:write'))throw err('صلاحية chat:write غير متاحة',403);
+  const t=await appToken(),ch=await kickGet('/public/v1/channels?slug='+encodeURIComponent(j.slug),t),br=Number(ch.data?.[0]?.broadcaster_user_id);
+  if(!Number.isSafeInteger(br)||br<=0)throw err('قناة غير متاحة');
+  const lock='kac:sendlock:'+j.account+':'+br;
+  if(await redis('SET',lock,'1','EX',3,'NX')!=='OK')throw err('الفاصل بين الرسائل غير كافٍ للقناة',429);
+  const r=await kickPost('/public/v1/chat',a.access_token,{type:'user',broadcaster_user_id:br,content});
+  if(r.data?.is_sent!==true)throw err('Kick لم يؤكد قبول الرسالة',502);
+  j.sent++;j.lastError='';j.nextAt=Date.now()+randDelay(j);
+  if((j.count!==null&&j.attempted>=j.count)||(j.endAt&&j.nextAt>=j.endAt))j.status='completed';
+ }catch(e){j.status='failed';j.lastError=String(e.message||'Unknown error').slice(0,250);
+  if(e.status===504||e.status===502){j.uncertain++;}else j.failed++;
+ }finally{
+  j.inflight=false;const latest=await loadPersistedJob(sid,id);
+  if(latest&&['paused','stopped'].includes(latest.status)){j.status=latest.status;j.nextAt=null}
+  await persistJob(sid,j);await saveForSid(s);
+ }
+ return json(res,200,{ok:true,running:j.status==='running',nextAt:j.nextAt||null,status:j.status});
+}
+function encryptBackup(obj,passphrase){if(typeof passphrase!=='string'||passphrase.length<12||passphrase.length>300)throw err('كلمة المرور لازم تكون 12 حرفًا على الأقل');
+ const salt=crypto.randomBytes(16),iv=crypto.randomBytes(12),key=crypto.pbkdf2Sync(passphrase,salt,310000,32,'sha256');
+ const cipher=crypto.createCipheriv('aes-256-gcm',key,iv);const plain=Buffer.from(JSON.stringify(obj));
+ if(plain.length>800000)throw err('حجم النسخة تجاوز الحد المسموح',413);
+ const payload=Buffer.concat([cipher.update(plain),cipher.final()]);return 'KAC4.'+Buffer.concat([salt,iv,cipher.getAuthTag(),payload]).toString('base64url')}
+function decryptBackup(code,passphrase){if(typeof code!=='string'||!/^KAC4\.[\w-]{20,1600000}$/.test(code)||typeof passphrase!=='string'||passphrase.length<12)throw err('صيغة كود النسخة أو كلمة المرور غير صحيحة');
+ const bytes=Buffer.from(code.slice(5),'base64url');if(bytes.length<45)throw err('كود النسخة غير كامل');
+ const key=crypto.pbkdf2Sync(passphrase,bytes.subarray(0,16),310000,32,'sha256');
+ try{const d=crypto.createDecipheriv('aes-256-gcm',key,bytes.subarray(16,28));d.setAuthTag(bytes.subarray(28,44));
+  const raw=Buffer.concat([d.update(bytes.subarray(44)),d.final()]);const x=JSON.parse(raw.toString('utf8'));
+  if(x?.format!=='KAC-SECURE-V4'||!Array.isArray(x.accounts)||!x.local||typeof x.local!=='object')throw Error('format');return x;
+ }catch{throw err('فشل فك التشفير: كلمة المرور أو الكود غير صحيح',400)}}
+async function verifyUserAccess(token){
+ if(typeof token!=='string'||token.length<20||token.length>2500||token.includes('|')||/\s/.test(token))throw err('توكن OAuth غير صالح؛ نوع ID|SESSION القديم غير مدعوم',400);
+ const intro=await outbound(AUTH+'/oauth/token/introspect',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/x-www-form-urlencoded'}});
+ const d=intro.data||{};if(d.active!==true||d.token_type!=='user')throw err('التوكن غير نشط أو ليس توكن مستخدم',401);
+ if(String(d.client_id)!==String(process.env.KICK_CLIENT_ID))throw err('التوكن يخص تطبيق OAuth آخر؛ اربط الحساب عن طريق تسجيل الدخول الرسمي لهذا التطبيق',403);
+ const u=await kickGet('/public/v1/users',token);const user=Array.isArray(u.data)?u.data[0]:u.data||{};
+ const id=String(user.user_id||user.id||'');if(!/^\d{1,24}$/.test(id))throw err('لم يحدد Kick مستخدم التوكن');
+ return {id,username:user.name||user.username||user.slug||id,avatar:user.profile_picture||user.profile_pic||'',access_token:token,scope:String(d.scope||''),expires:Number(d.exp)*1000||Date.now()+1800000};
+}
+
 module.exports=async(req,res)=>{
   res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');
   res.setHeader('X-Frame-Options','DENY');res.setHeader('Cache-Control','no-store');
@@ -106,8 +225,9 @@ module.exports=async(req,res)=>{
     const action=url.searchParams.get('action')||'health';
     if(action==='webhook')return await handleWebhook(req,res);
     if(!['GET','POST'].includes(req.method))throw err('غير مسموح',405);
-    if(action==='health')return json(res,200,{ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),version:'2026.10'});
-    let s=unseal(cookie(req,'kac_session'))||{accounts:[],csrf:rand(24)};
+    if(action==='health')return json(res,200,{ok:true,configured:!!(process.env.KICK_CLIENT_ID&&process.env.KICK_CLIENT_SECRET&&process.env.SESSION_SECRET),chatStorage:redisEnabled(),background:backgroundEnabled(),version:'2026.10.v4'});
+    if(action==='background_execute')return await backgroundExecute(req,res);
+    let s=await loadSession(req);
     if(action==='auth'){
       if(req.method!=='GET')throw err('غير مسموح',405);
       if(!process.env.KICK_CLIENT_ID||!process.env.KICK_CLIENT_SECRET)throw err('أدخل مفاتيح Kick في إعدادات Vercel أولًا',503);
@@ -128,12 +248,89 @@ module.exports=async(req,res)=>{
       const u=await kickGet('/public/v1/users',d.access_token);const user=Array.isArray(u.data)?u.data[0]:u.data||{};
       if(!user.user_id&&!user.id)throw err('لم نتمكن من تحديد مستخدم Kick',502);
       const id=String(user.user_id||user.id),a={id,username:user.name||user.username||user.slug||id,avatar:user.profile_picture||user.profile_pic||'',access_token:d.access_token,refresh_token:d.refresh_token||'',expires:Date.now()+Number(d.expires_in||3600)*1000,scope:d.scope||SCOPE};
-      s.accounts=s.accounts.filter(x=>x.id!==id);s.accounts.push(a);saveSession(res,s);
+      s.accounts=s.accounts.filter(x=>x.id!==id);s.accounts.push(a);await saveSession(res,s);
       res.statusCode=302;res.setHeader('Location','/?connected=1');return res.end();
     }
     if(action==='me'){
       if(req.method!=='GET')throw err('غير مسموح',405);
-      return json(res,200,{ok:true,accounts:publicAccounts(s),csrf:s.csrf,chatStorage:redisEnabled()});
+      if(s.accounts?.length){let changed=false;for(const a of s.accounts){if(a.refresh_token&&a.expires<Date.now()+15*60*1000){try{await accountToken(s,a.id);changed=true}catch(e){a.lastRefreshError=e.message}}}if(changed)await saveSession(res,s);if(backgroundEnabled()&&s._sid){try{await workerControl(s._sid,'session_refresh',true,Date.now()+1800000)}catch(e){/* renewal on next authenticated call remains available */}}}
+      return json(res,200,{ok:true,accounts:publicAccounts(s),csrf:s.csrf,chatStorage:redisEnabled(),background:backgroundEnabled()});
+    }
+
+    if(action==='import_token'){
+      if(req.method!=='POST')throw err('method',405);requireCsrf(req,s);const b=await readBody(req);
+      const a=await verifyUserAccess(String(b.access_token||''));a.refresh_token=typeof b.refresh_token==='string'?b.refresh_token.trim().slice(0,2500):'';
+      s.accounts=s.accounts.filter(x=>x.id!==a.id);s.accounts.push(a);await saveSession(res,s);
+      return json(res,200,{ok:true,account:publicAccounts({accounts:[a]})[0]});
+    }
+    if(action==='refresh_accounts'){
+      if(req.method!=='POST')throw err('method',405);requireCsrf(req,s);const statuses=[];
+      for(const a of s.accounts||[]){try{if(a.refresh_token&&a.expires<Date.now()+20*60*1000)await accountToken(s,a.id);statuses.push({id:a.id,ok:a.expires>Date.now(),renewable:!!a.refresh_token})}catch(e){statuses.push({id:a.id,ok:false,error:e.message})}}
+      await saveSession(res,s);return json(res,200,{ok:true,statuses,accounts:publicAccounts(s)});
+    }
+    if(action==='backup_export'){
+      if(req.method!=='POST')throw err('method',405);requireCsrf(req,s);const b=await readBody(req);
+      if(!b.local||typeof b.local!=='object'||Array.isArray(b.local))throw err('بيانات النسخة غير صحيحة');
+      const text=encryptBackup({format:'KAC-SECURE-V4',createdAt:new Date().toISOString(),accounts:s.accounts||[],local:b.local},b.passphrase);
+      return json(res,200,{ok:true,code:text});
+    }
+    if(action==='backup_import'){
+      if(req.method!=='POST')throw err('method',405);requireCsrf(req,s);const b=await readBody(req),v=decryptBackup(b.code,b.passphrase);
+      if(v.accounts.length>30)throw err('عدد الحسابات أكبر من الحد المسموح');
+      const verified=[],warnings=[];
+      for(const a of v.accounts){try{
+        let token=String(a.access_token||'');let detail;
+        try{detail=await verifyUserAccess(token)}catch(e){
+          if(!a.refresh_token)throw e;
+          const q=new URLSearchParams({grant_type:'refresh_token',client_id:process.env.KICK_CLIENT_ID,client_secret:process.env.KICK_CLIENT_SECRET,refresh_token:a.refresh_token});
+          const renewed=await outbound(AUTH+'/oauth/token',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:q.toString()});token=renewed.access_token;detail=await verifyUserAccess(token);a.refresh_token=renewed.refresh_token||a.refresh_token;
+        }
+        if(detail.id!==String(a.id))throw err('هوية الحساب لا تطابق النسخة');
+        detail.refresh_token=String(a.refresh_token||'');verified.push(detail);
+      }catch(e){warnings.push({id:String(a.id||'unknown').slice(0,24),reason:e.message})}}
+      // A restore must never inherit old still-running server jobs.
+      if(s._sid && backgroundEnabled()){
+        const ids=await redis('SMEMBERS','kac:jobs:'+s._sid)||[];
+        for(const id of ids.slice(0,500)){
+          const old=await loadPersistedJob(s._sid,id);
+          if(old && ['running','pending'].includes(old.status)){
+            old.status='paused';old.nextAt=null;await persistJob(s._sid,old);
+            try{await workerControl(s._sid,id,false)}catch(e){warnings.push({id,reason:'تعذّر إيقاف جدول قديم على المشغل: '+e.message})}
+          }
+        }
+      }
+      s.accounts=verified;s.csrf=rand(24);await saveSession(res,s);
+      return json(res,200,{ok:true,accounts:publicAccounts(s),csrf:s.csrf,local:v.local,warnings});
+    }
+    if(action==='jobs'){
+      if(req.method!=='GET')throw err('method',405);if(!redisEnabled()||!s._sid)return json(res,200,{ok:true,jobs:[],background:false});
+      const ids=await redis('SMEMBERS','kac:jobs:'+s._sid),jobs=[];
+      for(const id of (ids||[]).slice(0,500)){const j=await loadPersistedJob(s._sid,id);if(j)jobs.push(j)}
+      return json(res,200,{ok:true,jobs,background:backgroundEnabled()});
+    }
+    if(action==='job_command'){
+      if(req.method!=='POST')throw err('method',405);requireCsrf(req,s);if(!backgroundEnabled()||!s._sid)throw err('مشغل الخلفية غير مفعّل، راجع Redis وCloudflare',503);
+      const b=await readBody(req),command=String(b.command||''),id=String(b.job?.id||b.id||'');if(!validId(id))throw err('معرّف جدول غير صالح');
+      let j=await loadPersistedJob(s._sid,id);
+      if(command==='create'){
+        if(j)throw err('الجدول محفوظ بالفعل؛ استخدم أوامر التشغيل أو الإيقاف',409);
+        j=validateJob(b.job);if(!(s.accounts||[]).some(a=>String(a.id)===j.account))throw err('الحساب غير متصل',401);
+        if(b.job.status==='running'){j.status='running';j.nextAt=Date.now()+1500}
+        else if(b.job.status==='pending'&&Number.isFinite(b.job.startAt)){j.status='pending';j.nextAt=Number(b.job.startAt)}
+      }else if(!j)throw err('الجدول غير موجود على الخادم',404);
+      else if(command==='delete'){
+        await workerControl(s._sid,id,false);await redis('DEL',jobKey(s._sid,id));await redis('SREM','kac:jobs:'+s._sid,id);
+        return json(res,200,{ok:true,deleted:true});
+      }else if(['pause','stop'].includes(command)){j.status=command==='pause'?'paused':'stopped';j.nextAt=null}
+      else if(command==='start'){
+        if(j.inflight)throw err('هناك طلب سابق قيد المعالجة؛ راجع حالته قبل البدء',409);
+        if(j.count!==null&&j.attempted>=j.count)throw err('الجدول انتهى عدد رسائله',409);
+        if(j.endAt&&j.endAt<=Date.now())throw err('انتهى الوقت المحدد للجدول',409);
+        j.status='running';j.nextAt=Date.now()+1500;
+      }else throw err('الأمر غير مدعوم');
+      await persistJob(s._sid,j);
+      try{await workerControl(s._sid,id,['running','pending'].includes(j.status),j.nextAt)}catch(e){j.status='paused';j.lastError='تعذّر تسجيل مشغل الخلفية: '+e.message;await persistJob(s._sid,j);throw e}
+      return json(res,200,{ok:true,job:j});
     }
     if(action==='channel'){
       if(req.method!=='GET')throw err('غير مسموح',405);
@@ -144,7 +341,16 @@ module.exports=async(req,res)=>{
     }
     if(action==='remove'){
       if(req.method!=='POST')throw err('غير مسموح',405);requireCsrf(req,s);
-      const b=await readBody(req);s.accounts=s.accounts.filter(x=>x.id!==String(b.account||''));saveSession(res,s);return json(res,200,{ok:true,accounts:publicAccounts(s)});
+      const b=await readBody(req),account=String(b.account||'');
+      if(s._sid && backgroundEnabled()){
+        for(const id of (await redis('SMEMBERS','kac:jobs:'+s._sid)||[]).slice(0,500)){
+          const j=await loadPersistedJob(s._sid,id);
+          if(j&&j.account===account&&['running','pending'].includes(j.status)){
+            j.status='paused';j.nextAt=null;await persistJob(s._sid,j);await workerControl(s._sid,id,false);
+          }
+        }
+      }
+      s.accounts=s.accounts.filter(x=>x.id!==account);await saveSession(res,s);return json(res,200,{ok:true,accounts:publicAccounts(s)});
     }
     if(action==='send'){
       if(req.method!=='POST')throw err('غير مسموح',405);requireCsrf(req,s);
@@ -159,21 +365,21 @@ module.exports=async(req,res)=>{
       const lockKey=account+':'+broadcaster;
       if(redisEnabled()){
         const k='kac:sendlock:'+lockKey;
-        if(await redis('SET',k,'1','EX',8,'NX')!=='OK')throw err('الإرسال متقارب جدًا. حاول بعد ثوانٍ.',429);
+        if(await redis('SET',k,'1','EX',3,'NX')!=='OK')throw err('الإرسال متقارب جدًا. حاول بعد ثوانٍ.',429);
       }else{
         if((localSendCooldown.get(lockKey)||0)>Date.now())throw err('الإرسال متقارب جدًا. حاول بعد ثوانٍ.',429);
-        localSendCooldown.set(lockKey,Date.now()+8000);
+        localSendCooldown.set(lockKey,Date.now()+3000);
         if(localSendCooldown.size>1000)localSendCooldown.clear();
       }
       // Do not automatically retry ambiguous sends. A successful Kick response is returned, but webhook confirmation is distinct.
       const payload={type:'user',broadcaster_user_id:broadcaster,content};if(reply)payload.reply_to_message_id=reply;
-      let r;try{r=await kickPost('/public/v1/chat',a.access_token,payload)}finally{saveSession(res,s)}
+      let r;try{r=await kickPost('/public/v1/chat',a.access_token,payload)}finally{await saveSession(res,s)}
       return json(res,200,{ok:true,accepted:r.data?.is_sent===true,confirmedByEvent:false,result:r.data||null});
     }
     if(action==='myrewards'){
       if(req.method!=='GET')throw err('غير مسموح',405);
       const a=await accountToken(s,url.searchParams.get('account'));if(!String(a.scope||'').split(/\s+/).includes('channel:rewards:read'))throw err('تحتاج صلاحية channel:rewards:read',403);
-      const r=await kickGet('/public/v1/channels/rewards',a.access_token);saveSession(res,s);
+      const r=await kickGet('/public/v1/channels/rewards',a.access_token);await saveSession(res,s);
       return json(res,200,{ok:true,rewards:r.data||[]});
     }
     if(action==='subscribe'){
