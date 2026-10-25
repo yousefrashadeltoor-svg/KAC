@@ -1,351 +1,351 @@
-﻿Original list,Number,Original requirement,Status (2026.10),Evidence or reason
-A,1,إضافة عدد غير محدود محليًا من حسابات Kick.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,2,تسجيل الدخول الرسمي باستخدام OAuth 2.1.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,3,دعم تسجيل الدخول المتعدد Multi-Account.,PARTIAL_CONFIG_AND_TEST_NEEDED,OAuth multi-account in HttpOnly cookie; limited by cookie size
-A,4,إضافة الحسابات باستخدام التوكنات المسموح بها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,5,إدارة Access Tokens.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,6,إدارة Refresh Tokens.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,7,تجديد التوكنات تلقائيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,OAuth refresh on-demand at Kick token endpoint
-A,8,التحقق من صلاحية التوكنات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,9,عرض تاريخ انتهاء صلاحية كل توكن.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,10,عرض آخر عملية تحقق ناجحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,11,إخفاء التوكنات افتراضيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,12,زر إظهار وإخفاء التوكن.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,13,زر نسخ التوكن.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,14,تشفير البيانات الحساسة.,CODED_CONFIG_AND_TEST_NEEDED,AES-GCM encrypted HttpOnly session cookie
-A,15,حفظ الجلسات بصورة آمنة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,16,تسجيل الخروج وإلغاء الجلسات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,17,حذف الحسابات والتوكنات.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,18,تعديل أسماء الحسابات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,19,إضافة ملاحظات لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,20,تمييز الحسابات المفضلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,21,تفعيل وتعطيل الحسابات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,22,ربط حسابات محددة بقنوات معينة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,23,صفحة مستقلة لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,24,عرض الصورة والاسم وبيانات الحساب الحقيقية.,CODED_CONFIG_AND_TEST_NEEDED,GET /public/v1/users
-A,25,تبديل الحساب المستخدم للإرسال.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,26,عرض حالة الاتصال لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,27,إيقاف العمليات المرتبطة بالتوكن المنتهي.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,28,عرض إحصائيات كل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,29,إظهار جميع الحسابات المرتبطة بأسمائها الحقيقية.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,30,استخدام التوكنات الرسمية مع التطبيقات الأخرى عند توافق نوع المصادقة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,31,صفحة رئيسية تعرض القنوات والبثوث المضافة.,CODED_REQUIRES_LIVE_TEST,Local IndexedDB cards
-A,32,إضافة قنوات Kick بالاسم أو الرابط.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,33,البحث عن القنوات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,34,التحقق من وجود القناة.,CODED_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels?slug=
-A,35,تثبيت القنوات المفضلة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,36,إلغاء تثبيت القنوات.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,37,عرض البثوث في بطاقات احترافية.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,38,عرض الصورة الحقيقية للبث المباشر.,PARTIAL_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels stream.thumbnail
-A,39,عرض الصورة الشخصية للستريمر.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,40,عرض اسم الستريمر.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,41,عرض اسم المستخدم.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,42,إظهار حالة LIVE وOFF الحقيقية.,CODED_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels stream.is_live
-A,43,تحديث حالة البث تلقائيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,44,تحديث حالة قناة معينة يدويًا.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,45,تحديث جميع البثوث.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,46,عرض تاريخ آخر بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,47,عرض الوقت المنقضي منذ آخر بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,48,عرض عنوان البث الحالي.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,49,عرض تصنيف البث.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,50,عرض عدد المشاهدين المتاح من Kick.,CODED_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels stream.viewer_count
-A,51,عرض مدة البث المباشر.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,52,عرض معلومات القناة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,53,فتح صفحة مستقلة لكل بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,54,تشغيل الفيديو المباشر داخل التطبيق عند إتاحة التضمين.,CODED_REQUIRES_LIVE_TEST,Official Kick embed player; user-initiated; verified against help.kick.com.
-A,55,التحكم في تشغيل وإيقاف الفيديو.,CODED_FOREGROUND,User can close or open the official embedded player; player-native controls supplied by Kick.
-A,56,اختيار جودة الفيديو المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,57,ضبط الجودة تلقائيًا حسب سرعة الاتصال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,58,عرض الفيديو والشات معًا.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Official Kick player and signed-webhook chat rendered on same page when configured.
-A,59,دعم مشاهدة البث من الموبايل والتابلت والكمبيوتر.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,60,ترتيب البثوث حسب الحالة والنشاط.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,61,تصفية البثوث المباشرة وغير المباشرة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,62,عرض عدد البثوث المباشرة والإجمالي.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,63,إدارة قوائم متابعة القنوات داخل التطبيق.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,64,فتح قناة Kick الأصلية مباشرة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,65,عرض شات Kick الحقيقي لحظيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,Signed chat.message.sent Webhooks + optional Redis
-A,66,استقبال الرسائل الجديدة تلقائيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,67,تحميل الرسائل القديمة المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,68,الاحتفاظ بأرشيف الرسائل المستقبلة.,PARTIAL_CONFIG_AND_TEST_NEEDED,Redis last 350 events for 48h only
-A,69,الفصل بين شات البث الحالي والشات المؤرشف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,70,عرض الرسائل السابقة أثناء توقف البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,71,شريط تمرير مستقل للشات.,CODED_FOREGROUND,Chat panel CSS independent vertical scrolling.
-A,72,تمرير الشات بإصبع واحد على الموبايل.,CODED_FOREGROUND,Chat panel touch-action:pan-y.
-A,73,الانتقال إلى أحدث رسالة.,CODED_FOREGROUND,Latest button scrolls to bottom.
-A,74,التمرير التلقائي عند وصول رسائل جديدة.,CODED_FOREGROUND,Stick-to-bottom for received events when already near bottom.
-A,75,إيقاف التمرير التلقائي أثناء قراءة الرسائل القديمة.,CODED_FOREGROUND,Keeps prior position if user scrolled up.
-A,76,عرض اسم مرسل الرسالة.,CODED_REQUIRES_LIVE_TEST,Sender username from captured signed Kick event.
-A,77,عرض الصورة الشخصية للمرسل.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,78,عرض وقت إرسال الرسالة.,CODED_REQUIRES_LIVE_TEST,Sender time from captured event timestamp.
-A,79,عرض شارات المستخدمين Badges.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Sender badge labels when Kick event includes identity.badges.
-A,80,تمييز المشرفين Moderators.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,81,تمييز الرسائل المرسلة من حساباتك.,CODED_REQUIRES_LIVE_TEST,Connected-account username highlighted on received messages.
-A,82,تمييز الرسائل التي ترد على حساباتك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,83,تمييز ردود المستخدمين الآخرين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,84,عرض الإيموتات الأصلية لـKick.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,85,معالجة صيغة `[emote:id:name]`.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,86,عرض الألوان الأصلية لأسماء المستخدمين عند توفرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,87,عرض الرسائل النظامية وأحداث الإشراف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,88,الرد على رسالة محددة.,CODED_REQUIRES_LIVE_TEST,Reply-to existing message via official chat endpoint.
-A,89,عرض الرسالة الأصلية داخل الرد.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Reply context rendered if included by Kick event.
-A,90,إلغاء وضع الرد.,CODED_FOREGROUND,Reply banner cancel button.
-A,91,إرسال الرد بالحساب المختار.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,92,عرض الرسالة المرسلة داخل الشات بعد تأكيدها.,PARTIAL_CONFIG_AND_TEST_NEEDED,webhook only: delivery events not simulated
-A,93,البحث داخل الرسائل.,CODED_REQUIRES_LIVE_TEST,Search within captured chat messages.
-A,94,تصفية الرسائل حسب المستخدم والنوع.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,95,عرض الإشارات Mentions.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,96,عرض عدد الرسائل غير المقروءة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,97,صفحة تجمع الردود الموجهة لحساباتك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,98,فتح الملف الشخصي لأي مستخدم بالشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,99,إظهار حالة قيود الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,100,عرض وضع المشتركين فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,101,عرض وضع المتابعين فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,102,عرض وضع الإيموتات فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,103,عرض Slow Mode.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,104,إظهار حالة حظر الحساب من الشات عند توفرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,105,عرض مدة الحظر وسببه عند توفر البيانات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,106,إرسال رسائل حقيقية إلى قنوات Kick المسموح بالإرسال إليها.,CODED_REQUIRES_LIVE_TEST,"Official POST /public/v1/chat with user OAuth; tested against mocked server, live credentials needed."
-A,107,اختيار الحساب المستخدم في الإرسال.,CODED_FOREGROUND,Choose account for manual/scheduled send.
-A,108,اختيار القناة المستهدفة.,CODED_FOREGROUND,Choose channel for manual/scheduled send.
-A,109,محرر رسائل متعدد.,CODED_FOREGROUND,Multi-line message editor in schedules.
-A,110,اعتبار كل سطر رسالة مستقلة.,CODED_FOREGROUND,Each nonempty line becomes separate scheduled message.
-A,111,لصق عدة رسائل دفعة واحدة.,CODED_FOREGROUND,Multi-line paste into schedule editor.
-A,112,لصق نص كامل كرسالة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,113,إضافة الرسائل وتعديلها وحذفها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,114,تكرار الرسائل داخل القائمة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,115,إعادة ترتيب الرسائل بالسحب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,116,تحديد الرسائل المستخدمة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,117,الإرسال بالترتيب.,CODED_FOREGROUND,Bounded ordered foreground send queue.
-A,118,اختيار الرسائل عشوائيًا.,CODED_FOREGROUND,Random selection from configured lines.
-A,119,تحديد الفاصل الزمني بين الرسائل.,CODED_FOREGROUND,Configurable minimum 30s interval.
-A,120,فاصل زمني عشوائي بحد أدنى وأقصى.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,121,تحديد عدد الرسائل.,CODED_FOREGROUND,Send count 1–30; foreground queue.
-A,122,تحديد عدد دورات الإرسال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,123,وضع إرسال مستمر مع الالتزام بقيود Kick.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,124,حساب المدة المتوقعة للإرسال.,CODED_FOREGROUND,Visible next scheduled send timestamp.
-A,125,آلة حاسبة للثواني والدقائق والساعات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,126,إرسال الرسائل لقناة واحدة أو عدة قنوات مصرح بها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,127,إعدادات إرسال مستقلة لكل قناة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,128,إعدادات إرسال مستقلة لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,129,بدء الإرسال وإيقافه.,CODED_FOREGROUND,"Start-now, pause, stop, resume through persisted local schedules."
-A,130,إيقاف الطلبات المعلقة الممكن إلغاؤها.,CODED_FOREGROUND,AbortController for in-flight browser request; outcome may remain ambiguous.
-A,131,إظهار حالة كل عملية إرسال.,CODED_REQUIRES_LIVE_TEST,"Per-schedule execution log, accepted count, status."
-A,132,عرض الرسائل الناجحة والفاشلة.,CODED_REQUIRES_LIVE_TEST,Accepted and failed counts; no false delivery claims.
-A,133,عرض آخر وقت إرسال.,CODED_REQUIRES_LIVE_TEST,Activity log timestamps.
-A,134,معالجة حدود الإرسال Rate Limits.,CODED_REQUIRES_LIVE_TEST,Server cooldown enforcement; Redis if configured.
-A,135,التعامل مع أخطاء HTTP 429.,CODED_REQUIRES_LIVE_TEST,HTTP 429 halts sequence; no automatic retry.
-A,136,منع تكرار الطلبات غير المؤكدة.,CODED_REQUIRES_LIVE_TEST,Message index reserved before request and no auto resend of uncertain sends.
-A,137,التحقق من نتيجة الإرسال.,CODED_REQUIRES_LIVE_TEST,Requires Kick is_sent=true for accepted state.
-A,138,معالجة انتهاء الجلسة أثناء الإرسال.,CODED_REQUIRES_LIVE_TEST,Missing/expired account pauses scheduler.
-A,139,إرسال رسالة واحدة يدويًا.,CODED_FOREGROUND,Manual single-message send retained.
-A,140,تفعيل الإرسال للقنوات المباشرة فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,141,خيار السماح بالإرسال للقنوات غير المباشرة إذا كانت القناة تسمح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,142,تحديد عدة حسابات أو قنوات دفعة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,143,إعدادات التزامن للإرسال المسموح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,144,سجل كامل لعمليات الإرسال.,CODED_REQUIRES_LIVE_TEST,Locally saved bounded per-schedule activity log.
-A,145,إنشاء عدة جداول إرسال مستقلة.,CODED_FOREGROUND,Multiple independent schedules saved in IndexedDB.
-A,146,تسمية كل جدول.,CODED_FOREGROUND,Named schedules.
-A,147,اختيار الحساب لكل جدول.,CODED_FOREGROUND,Per-schedule linked account selection.
-A,148,اختيار القنوات لكل جدول.,CODED_FOREGROUND,Per-schedule channel selection (one per schedule).
-A,149,تحديد وقت البداية.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,"Local scheduled start, foreground-only."
-A,150,تحديد وقت النهاية.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Optional end time halts dispatch.
-A,151,تحديد مدة التشغيل.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,End time can limit window; no standalone duration selector.
-A,152,تحديد أيام التشغيل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,153,جدولة يومية وأسبوعية ومتكررة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,154,تحديد رسائل مستقلة لكل جدول.,CODED_FOREGROUND,Own newline-separated messages per schedule.
-A,155,تحديد فاصل زمني مستقل لكل جدول.,CODED_FOREGROUND,Own send interval 30–3600 seconds.
-A,156,دعم الاختيار العشوائي للرسائل داخل الجدول.,CODED_FOREGROUND,Random or ordered selection per schedule.
-A,157,تفعيل وتعطيل الجدول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,158,إيقاف جدول محدد.,CODED_FOREGROUND,Stop or pause individual schedule.
-A,159,استكمال جدول متوقف حسب حالته المحفوظة.,CODED_FOREGROUND,Resume on explicit user action; never catch up automatically.
-A,160,عرض التشغيل القادم.,CODED_FOREGROUND,Next time shown while running.
-A,161,عرض آخر تشغيل.,CODED_FOREGROUND,Timestamped activity log.
-A,162,عرض عدد الرسائل المرسلة في كل جدول.,CODED_FOREGROUND,Accepted count per schedule.
-A,163,عرض عدد العمليات الفاشلة.,CODED_FOREGROUND,Failure count per schedule.
-A,164,تشغيل الجدولة من Backend.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,165,الاحتفاظ بالجداول بعد إغلاق المتصفح.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Schedules persist in IndexedDB; execution DOES NOT continue after tab closes.
-A,166,اكتشاف عمليات التشغيل الفائتة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,167,منع تنفيذ نفس المهمة مرتين.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Web Locks per browser origin; local schedule version can still be stale across multiple devices.
-A,168,الاستفادة من Queue وCron وDurable Objects عند الحاجة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,169,تسجيل حالات اكتمال وفشل وإلغاء المهام.,CODED_FOREGROUND,"Completed, stopped, paused and failed states, with logs."
-A,170,مراقبة القنوات المباشرة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,171,إشعار بدء البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,172,إشعار انتهاء البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,173,إشعارات انتهاء صلاحية التوكنات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,174,إشعارات أخطاء الإرسال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,175,إشعارات انقطاع الاتصال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,176,إشعارات بدء وانتهاء الجداول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,177,مركز إشعارات موحد.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,178,إشعارات صوتية اختيارية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,179,إعداد أوقات عدم الإزعاج.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,180,تحديد أولوية التنبيهات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,181,منع تكرار التنبيه خلال مدة قصيرة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,182,سجل نشاط البثوث والحسابات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,183,إعادة الاتصال عند انقطاع الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,184,عرض حالة الاتصال وإعادة الاتصال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,185,عرض حالة الخدمات الخلفية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,186,عرض أخطاء API بصورة مفهومة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,187,زر نقاط مستقل أعلى كل بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,188,عرض نقاط القناة لكل حساب متصل إذا كانت البيانات متاحة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,189,عرض النقاط المكتسبة أثناء البث إذا أمكن قياسها فعليًا.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,190,عرض مدة المشاهدة الخاصة بكل حساب عند توفرها.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,191,عرض مستوى Level الخاص بكل حساب إذا كان متاحًا.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,192,عرض إحصائيات النقاط لكل حساب في نافذة واحدة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,193,معرفة وجود متجر مكافآت النقاط بالقناة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,194,فتح متجر مكافآت القناة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,195,عرض مكافآت المتجر الحقيقية.,PARTIAL_CONFIG_AND_TEST_NEEDED,Only own channel reward data via scope
-A,196,عرض تكلفة كل مكافأة بالنقاط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,197,عرض وصف المكافآت ومعلوماتها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,198,متابعة قنوات Kick فعليًا بالحساب المصرح له عند توفر وسيلة مدعومة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,199,إلغاء متابعة القنوات بالطريقة المدعومة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,200,عرض حالة متابعة الحساب للقناة عند توفر البيانات.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards."
-A,201,إدارة أكثر من قناة في نفس التطبيق.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,202,أدوات الإشراف للقنوات المصرح للحساب بإدارتها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,203,حظر المستخدمين ورفع الحظر بالصلاحيات المناسبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,204,قواعد للكلمات المحظورة في شات القناة التي تديرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,205,تنبيهات بمخالفات قواعد الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,206,سجل مخالفات وإجراءات إشراف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,207,رسائل ترحيب بالأعضاء الجدد عند توافر الحدث المناسب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,208,أوامر شات مخصصة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,209,ردود تلقائية محددة بالقواعد.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,210,التحكم في Slow Mode عند توفير صلاحيات وواجهة مناسبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,211,منع الرسائل المكررة وفق قواعد الإشراف المصرح بها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,212,متابعة أحداث الاشتراكات والهدايا والمتابعات المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,213,مكتبة داخلية للرسائل والمجموعات.,CODED_FOREGROUND,Message library retained.
-A,214,مكتبة ملاحظات.,CODED_FOREGROUND,Notes library retained.
-A,215,إنشاء وتعديل وحذف الملفات المحلية.,CODED_FOREGROUND,Local notes create/edit/delete retained.
-A,216,نسخ الملفات والملاحظات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,217,إضافة الملفات للمفضلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,218,البحث والتصفية داخل المكتبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,219,الحفظ التلقائي للتغييرات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,220,نسخ الرسائل بصيغة JSON.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,221,لصق الرسائل من JSON.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,222,استيراد ملفات JSON.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,223,تصدير ملفات JSON.,CODED_FOREGROUND,Local data JSON export retained.
-A,224,الاختيار بين الإضافة والاستبدال.,CODED_FOREGROUND,Local JSON import retained.
-A,225,مشاركة إعدادات القنوات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,226,مشاركة مجموعات الرسائل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,227,مشاركة الملفات المحددة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,228,مشاركة المكتبة كاملة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,229,استيراد إعدادات التطبيق.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,230,نسخ احتياطي لبيانات التطبيق.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,231,استعادة النسخ الاحتياطية.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,232,استبعاد التوكنات السرية من المشاركة العادية.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,233,تحذيرات قبل استبدال البيانات.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,234,التراجع عن بعض التغييرات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,235,مسح البيانات المحلية بتأكيد واضح.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,236,تخزين البيانات باستخدام IndexedDB.,PARTIAL_CONFIG_AND_TEST_NEEDED,Local IndexedDB; no remote account synchronization
-A,237,تشغيل الميزات المحلية دون إنترنت.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,238,إمكانية تحويل التطبيق إلى PWA.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,239,واجهة عربية وإنجليزية كاملة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,240,دعم RTL وLTR.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,241,تصميم فاخر يجمع أناقة iOS وتنظيم Samsung One UI.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,242,واجهة داكنة احترافية.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,243,وضع فاتح واختيار ثيم النظام.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,244,تخصيص لون الواجهة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,245,استخدام خط عربي أنيق قريب من خط iOS.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,246,بطاقات وأزرار ناعمة ومستديرة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,247,شريط تنقل عائم شبيه بتطبيقات Mac.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,248,أيقونات احترافية مع أسماء واضحة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,249,تصميم متجاوب مع جميع أحجام الشاشات.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,250,خيارات تصغير وتكبير كثافة الواجهة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,251,تخصيص أحجام الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,252,تخصيص شكل وعرض الشارات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,253,تخصيص إظهار التوقيت.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,254,تخصيص حركة التمرير.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,255,اختيار مستوى توفير البيانات.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,256,إيقاف تحميل صور المستخدمين.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,257,إيقاف تحميل صور البثوث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,258,تقليل تحديث الصور.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,259,تعطيل تشغيل الفيديو التلقائي.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,260,تقليل استهلاك البطارية.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,261,تقليل الرسوم المتحركة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,262,نوافذ منبثقة احترافية.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,263,رسائل Toast صغيرة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,264,حالات تحميل Skeleton.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,265,البحث والفرز في القوائم.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,266,حفظ تفضيلات التصميم تلقائيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,267,دعم الاستخدام باللمس ولوحة المفاتيح.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,268,عدم إظهار أي نصوص تطويرية أو تعليمات للمبرمج في الواجهة العامة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,269,عدم استخدام بيانات وهمية أو محاكاة للوظائف الحقيقية.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,270,الحفاظ على منطق JavaScript الأصلي أثناء تغيير التصميم.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,271,استخدام HTML وCSS وJavaScript مباشرة دون React أو Vite.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,272,دعم ملف HTML واحد أثناء بناء النسخة التجريبية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,273,إعداد مشروع جاهز للنشر عبر GitHub وVercel.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,274,فصل أسرار وخدمات Backend عن الملفات العامة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,275,ربط التطبيق بخدمات Cloudflare Workers.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,276,ربط Backend إضافي على Vercel.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,277,استخدام قواعد بيانات مشتركة عند الحاجة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,278,تجربة توزيع الخدمات على عشرة حسابات Cloudflare، في حدود السياسات المسموح بها ودون التحايل على حصص الاستخدام.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,279,اختيار Backend عامل عند تعطل خدمة أخرى.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,280,إدارة الطلبات من خلال Queue مشتركة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,281,تخزين التوكنات والأسرار في الخادم.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Encrypted HttpOnly browser cookie, not server database"
-A,282,منع تسريب Client Secret للمتصفح.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,283,استخدام OAuth PKCE وState.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,284,حماية الجلسات والطلبات من الوصول غير المصرح.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-A,285,استقبال أحداث Kick باستخدام Webhooks.,PARTIAL_CONFIG_AND_TEST_NEEDED,Signed webhooks require Redis storage
-A,286,التحقق من صحة طلبات Webhook.,PARTIAL_CONFIG_AND_TEST_NEEDED,RSA-SHA256 + current Kick public key
-A,287,معالجة انقطاع السيرفر دون فقدان حالات المهام المحفوظة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,288,إدارة الاشتراكات المدفوعة في التطبيق.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,289,إنشاء أكواد تفعيل للاشتراكات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,290,أكواد تفعيل تستخدم مرة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,291,تحديد مدة صلاحية الاشتراك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,292,تجديد وتمديد الاشتراكات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,293,ربط الاشتراك بجهاز أو جلسة عند الحاجة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,294,لوحة تحكم لإدارة المشتركين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,295,إيقاف وإلغاء تفعيل الاشتراكات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,296,إدارة صلاحيات المستخدمين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,297,حماية الوظائف المدفوعة من التعديل من المتصفح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,298,سجل محاولات الدخول والاستخدام.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,299,مراقبة استهلاك الخدمة وحدودها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.
-A,300,التحقق من صحة الملفات والبيانات المدخلة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials."
-B,1,رسم بياني مباشر لتغير عدد المشاهدين,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,2,اكتشاف أعلى ذروة مشاهدة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,3,مراقب سرعة نمو المشاهدين,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,4,مقارنة أداء عدة بثوث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,5,تقرير تحليلي بعد انتهاء البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,6,اكتشاف أفضل أوقات البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,7,مستكشف البثوث الجديدة حسب التصنيف,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,8,البحث المتقدم باستخدام Custom Tags,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,9,رادار نشاط التصنيفات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,10,اكتشاف البثوث التي بدأت حديثًا,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,11,اكتشاف عدم استقرار البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,12,سجل تغييرات بيانات البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,13,تعديل بيانات البث من داخل KAC,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,14,التراجع عن تعديل بيانات البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,15,علامات مرجعية زمنية داخل البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,16,محرر مكافآت القناة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,17,صندوق طلبات استبدال المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,18,قبول أو رفض طلب استبدال مكافأة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,19,البحث التفصيلي داخل طلبات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,20,ترتيب المكافآت حسب الاستخدام,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,21,تحليل النقاط المستخدمة في استبدال المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,22,قياس مدة معالجة طلبات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,23,سجل إصدارات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,24,تصدير سجل طلبات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,25,لوحة ترتيب هدايا KICKs,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,26,خط زمني لهدايا KICKs,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,27,تنبيهات الهدايا الكبيرة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,28,تحليل المشتركين المدفوعين والمهديين,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,29,تحليل أنواع أحداث الاشتراكات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,30,رسم بياني لنمو المتابعات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,31,خريطة اللحظات الأعلى تفاعلًا,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,32,رسم بياني لكثافة الشات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,33,حساب المشاركين النشطين في المحادثة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,34,صندوق الأسئلة المباشرة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,35,اكتشاف الأسئلة المتكررة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,36,خريطة المحادثات المتفرعة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,37,إعادة تشغيل أحداث الشات المسجلة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,38,ترجمة رسالة محددة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,39,القراءة الصوتية للرسائل,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,40,الكتابة الصوتية للرسائل,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,41,اكتشاف أول ظهور مرصود للمستخدم,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,42,فحص الروابط المريبة في الشات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,43,تحليل الإيموتات الأكثر استخدامًا,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,44,تحليل الكلمات والموضوعات الشائعة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,45,نافذة فيديو عائمة Picture-in-Picture,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,46,إدارة الصوت عند مشاهدة عدة بثوث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,47,مشاركة تقرير مشاهدة مباشر للقراءة فقط,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,48,مزامنة حالة لوحة التحكم بين الأجهزة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,49,مصفوفة الصلاحيات الفعلية,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
-B,50,مقياس تأخير وصول أحداث Kick,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.
+﻿Original list,Number,Original requirement,Status (2026.10),Evidence or reason,Notes v4
+A,1,إضافة عدد غير محدود محليًا من حسابات Kick.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,2,تسجيل الدخول الرسمي باستخدام OAuth 2.1.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,3,دعم تسجيل الدخول المتعدد Multi-Account.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Redis-encrypted HttpOnly session supports multiple OAuth accounts, verified with offline tests; needs real login and Redis configured.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,4,إضافة الحسابات باستخدام التوكنات المسموح بها.,CODED_REQUIRES_LIVE_TEST,Official user OAuth token import via /oauth/token/introspect; same Client ID only. Legacy ID|SESSION unsupported.,Official user OAuth token import via /oauth/token/introspect; same Client ID only. Legacy ID|SESSION unsupported.
+A,5,إدارة Access Tokens.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,6,إدارة Refresh Tokens.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,7,تجديد التوكنات تلقائيًا.,CODED_CONFIG_AND_TEST_NEEDED,Automatic refresh with saved refresh token on calls plus half-hour DO session alarms; requires Kick token validity and active external services.,Automatic refresh with saved refresh token on calls plus half-hour DO session alarms; requires Kick token validity and active external services.
+A,8,التحقق من صلاحية التوكنات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,9,عرض تاريخ انتهاء صلاحية كل توكن.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,10,عرض آخر عملية تحقق ناجحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,11,إخفاء التوكنات افتراضيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,12,زر إظهار وإخفاء التوكن.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,13,زر نسخ التوكن.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,14,تشفير البيانات الحساسة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,15,حفظ الجلسات بصورة آمنة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,16,تسجيل الخروج وإلغاء الجلسات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,17,حذف الحسابات والتوكنات.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,18,تعديل أسماء الحسابات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,19,إضافة ملاحظات لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,20,تمييز الحسابات المفضلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,21,تفعيل وتعطيل الحسابات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,22,ربط حسابات محددة بقنوات معينة.,CODED_FOREGROUND,Account-specific channel links persisted locally; adding requires official channel lookup.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,23,صفحة مستقلة لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,24,عرض الصورة والاسم وبيانات الحساب الحقيقية.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,25,تبديل الحساب المستخدم للإرسال.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,26,عرض حالة الاتصال لكل حساب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,27,إيقاف العمليات المرتبطة بالتوكن المنتهي.,PARTIAL_CONFIG_AND_TEST_NEEDED,Account-level stop pauses its foreground schedules; no server-side persistent queue.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,28,عرض إحصائيات كل حساب.,PARTIAL_CONFIG_AND_TEST_NEEDED,Per-account accepted/rejected/uncertain/queued counters; partial tracking per device for manual sends.,Per-account accepted/rejected/uncertain/queued counters; partial tracking per device for manual sends.
+A,29,إظهار جميع الحسابات المرتبطة بأسمائها الحقيقية.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,30,استخدام التوكنات الرسمية مع التطبيقات الأخرى عند توافق نوع المصادقة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,31,صفحة رئيسية تعرض القنوات والبثوث المضافة.,CODED_REQUIRES_LIVE_TEST,Local IndexedDB cards,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,32,إضافة قنوات Kick بالاسم أو الرابط.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,33,البحث عن القنوات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,34,التحقق من وجود القناة.,CODED_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels?slug=,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,35,تثبيت القنوات المفضلة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,36,إلغاء تثبيت القنوات.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,37,عرض البثوث في بطاقات احترافية.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,38,عرض الصورة الحقيقية للبث المباشر.,PARTIAL_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels stream.thumbnail,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,39,عرض الصورة الشخصية للستريمر.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,40,عرض اسم الستريمر.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,41,عرض اسم المستخدم.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,42,إظهار حالة LIVE وOFF الحقيقية.,CODED_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels stream.is_live,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,43,تحديث حالة البث تلقائيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,44,تحديث حالة قناة معينة يدويًا.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,45,تحديث جميع البثوث.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,46,عرض تاريخ آخر بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,47,عرض الوقت المنقضي منذ آخر بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,48,عرض عنوان البث الحالي.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,49,عرض تصنيف البث.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,50,عرض عدد المشاهدين المتاح من Kick.,CODED_CONFIG_AND_TEST_NEEDED,GET /public/v1/channels stream.viewer_count,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,51,عرض مدة البث المباشر.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,52,عرض معلومات القناة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,53,فتح صفحة مستقلة لكل بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,54,تشغيل الفيديو المباشر داخل التطبيق عند إتاحة التضمين.,CODED_REQUIRES_LIVE_TEST,Official Kick embed player; user-initiated; verified against help.kick.com.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,55,التحكم في تشغيل وإيقاف الفيديو.,CODED_FOREGROUND,User can close or open the official embedded player; player-native controls supplied by Kick.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,56,اختيار جودة الفيديو المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,57,ضبط الجودة تلقائيًا حسب سرعة الاتصال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,58,عرض الفيديو والشات معًا.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Official Kick player and signed-webhook chat rendered on same page when configured.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,59,دعم مشاهدة البث من الموبايل والتابلت والكمبيوتر.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,60,ترتيب البثوث حسب الحالة والنشاط.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,61,تصفية البثوث المباشرة وغير المباشرة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,62,عرض عدد البثوث المباشرة والإجمالي.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,63,إدارة قوائم متابعة القنوات داخل التطبيق.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,64,فتح قناة Kick الأصلية مباشرة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,65,عرض شات Kick الحقيقي لحظيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,Signed chat.message.sent Webhooks + optional Redis,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,66,استقبال الرسائل الجديدة تلقائيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,67,تحميل الرسائل القديمة المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,68,الاحتفاظ بأرشيف الرسائل المستقبلة.,PARTIAL_CONFIG_AND_TEST_NEEDED,Redis last 350 events for 48h only,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,69,الفصل بين شات البث الحالي والشات المؤرشف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,70,عرض الرسائل السابقة أثناء توقف البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,71,شريط تمرير مستقل للشات.,CODED_FOREGROUND,Chat panel CSS independent vertical scrolling.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,72,تمرير الشات بإصبع واحد على الموبايل.,CODED_FOREGROUND,Chat panel touch-action:pan-y.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,73,الانتقال إلى أحدث رسالة.,CODED_FOREGROUND,Latest button scrolls to bottom.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,74,التمرير التلقائي عند وصول رسائل جديدة.,CODED_FOREGROUND,Stick-to-bottom for received events when already near bottom.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,75,إيقاف التمرير التلقائي أثناء قراءة الرسائل القديمة.,CODED_FOREGROUND,Keeps prior position if user scrolled up.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,76,عرض اسم مرسل الرسالة.,CODED_REQUIRES_LIVE_TEST,Sender username from captured signed Kick event.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,77,عرض الصورة الشخصية للمرسل.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,78,عرض وقت إرسال الرسالة.,CODED_REQUIRES_LIVE_TEST,Sender time from captured event timestamp.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,79,عرض شارات المستخدمين Badges.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Sender badge labels when Kick event includes identity.badges.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,80,تمييز المشرفين Moderators.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,81,تمييز الرسائل المرسلة من حساباتك.,CODED_REQUIRES_LIVE_TEST,Connected-account username highlighted on received messages.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,82,تمييز الرسائل التي ترد على حساباتك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,83,تمييز ردود المستخدمين الآخرين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,84,عرض الإيموتات الأصلية لـKick.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,85,معالجة صيغة `[emote:id:name]`.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,86,عرض الألوان الأصلية لأسماء المستخدمين عند توفرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,87,عرض الرسائل النظامية وأحداث الإشراف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,88,الرد على رسالة محددة.,CODED_REQUIRES_LIVE_TEST,Reply-to existing message via official chat endpoint.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,89,عرض الرسالة الأصلية داخل الرد.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Reply context rendered if included by Kick event.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,90,إلغاء وضع الرد.,CODED_FOREGROUND,Reply banner cancel button.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,91,إرسال الرد بالحساب المختار.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,92,عرض الرسالة المرسلة داخل الشات بعد تأكيدها.,PARTIAL_CONFIG_AND_TEST_NEEDED,webhook only: delivery events not simulated,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,93,البحث داخل الرسائل.,CODED_REQUIRES_LIVE_TEST,Search within captured chat messages.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,94,تصفية الرسائل حسب المستخدم والنوع.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,95,عرض الإشارات Mentions.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,96,عرض عدد الرسائل غير المقروءة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,97,صفحة تجمع الردود الموجهة لحساباتك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,98,فتح الملف الشخصي لأي مستخدم بالشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,99,إظهار حالة قيود الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,100,عرض وضع المشتركين فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,101,عرض وضع المتابعين فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,102,عرض وضع الإيموتات فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,103,عرض Slow Mode.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,104,إظهار حالة حظر الحساب من الشات عند توفرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,105,عرض مدة الحظر وسببه عند توفر البيانات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,106,إرسال رسائل حقيقية إلى قنوات Kick المسموح بالإرسال إليها.,CODED_REQUIRES_LIVE_TEST,"Official POST /public/v1/chat with user OAuth; tested against mocked server, live credentials needed.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,107,اختيار الحساب المستخدم في الإرسال.,CODED_FOREGROUND,Choose account for manual/scheduled send.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,108,اختيار القناة المستهدفة.,CODED_FOREGROUND,Choose channel for manual/scheduled send.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,109,محرر رسائل متعدد.,CODED_FOREGROUND,Multi-line message editor in schedules.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,110,اعتبار كل سطر رسالة مستقلة.,CODED_FOREGROUND,Each nonempty line becomes separate scheduled message.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,111,لصق عدة رسائل دفعة واحدة.,CODED_FOREGROUND,Multi-line paste into schedule editor.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,112,لصق نص كامل كرسالة واحدة.,CODED_FOREGROUND,Messages entered one per line in stream-specific editor.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,113,إضافة الرسائل وتعديلها وحذفها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,114,تكرار الرسائل داخل القائمة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,115,إعادة ترتيب الرسائل بالسحب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,116,تحديد الرسائل المستخدمة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,117,الإرسال بالترتيب.,CODED_FOREGROUND,Per-schedule ordered sending (foreground only).,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,118,اختيار الرسائل عشوائيًا.,CODED_FOREGROUND,Per-schedule random message ordering (foreground only).,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,119,تحديد الفاصل الزمني بين الرسائل.,CODED_REQUIRES_LIVE_TEST,Minimum 3s fixed interval with server throttling and Kick 429 stopping; no guaranteed throughput.,Minimum 3s fixed interval with server throttling and Kick 429 stopping; no guaranteed throughput.
+A,120,فاصل زمني عشوائي بحد أدنى وأقصى.,CODED_REQUIRES_LIVE_TEST,"Cryptographically sampled random delay with configurable bounds, minimum 3s.","Cryptographically sampled random delay with configurable bounds, minimum 3s."
+A,121,تحديد عدد الرسائل.,CODED_REQUIRES_LIVE_TEST,"Count null means no predetermined number; manual stop, end time, limits and errors still apply.","Count null means no predetermined number; manual stop, end time, limits and errors still apply."
+A,122,تحديد عدد دورات الإرسال.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,123,وضع إرسال مستمر مع الالتزام بقيود Kick.,CODED_CONFIG_AND_TEST_NEEDED,"No fixed count, but Kick/platform anti-spam controls and task cancellation apply.","No fixed count, but Kick/platform anti-spam controls and task cancellation apply."
+A,124,حساب المدة المتوقعة للإرسال.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,125,آلة حاسبة للثواني والدقائق والساعات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,126,إرسال الرسائل لقناة واحدة أو عدة قنوات مصرح بها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,127,إعدادات إرسال مستقلة لكل قناة.,CODED_FOREGROUND,Independent per-account/per-stream templates and schedules in IndexedDB.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,128,إعدادات إرسال مستقلة لكل حساب.,CODED_FOREGROUND,Independent account and channel settings; account-level pause flag.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,129,بدء الإرسال وإيقافه.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,130,إيقاف الطلبات المعلقة الممكن إلغاؤها.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,131,إظهار حالة كل عملية إرسال.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,132,عرض الرسائل الناجحة والفاشلة.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,133,عرض آخر وقت إرسال.,CODED_REQUIRES_LIVE_TEST,Activity log timestamps.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,134,معالجة حدود الإرسال Rate Limits.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,135,التعامل مع أخطاء HTTP 429.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,136,منع تكرار الطلبات غير المؤكدة.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,137,التحقق من نتيجة الإرسال.,CODED_REQUIRES_LIVE_TEST,Requires Kick is_sent=true for accepted state.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,138,معالجة انتهاء الجلسة أثناء الإرسال.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,139,إرسال رسالة واحدة يدويًا.,CODED_FOREGROUND,Manual single-message send retained.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,140,تفعيل الإرسال للقنوات المباشرة فقط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,141,خيار السماح بالإرسال للقنوات غير المباشرة إذا كانت القناة تسمح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,142,تحديد عدة حسابات أو قنوات دفعة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,143,إعدادات التزامن للإرسال المسموح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,144,سجل كامل لعمليات الإرسال.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,145,إنشاء عدة جداول إرسال مستقلة.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,146,تسمية كل جدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,147,اختيار الحساب لكل جدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,148,اختيار القنوات لكل جدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,149,تحديد وقت البداية.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,150,تحديد وقت النهاية.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,151,تحديد مدة التشغيل.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,152,تحديد أيام التشغيل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,153,جدولة يومية وأسبوعية ومتكررة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,154,تحديد رسائل مستقلة لكل جدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,155,تحديد فاصل زمني مستقل لكل جدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,156,دعم الاختيار العشوائي للرسائل داخل الجدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,157,تفعيل وتعطيل الجدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,158,إيقاف جدول محدد.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,159,استكمال جدول متوقف حسب حالته المحفوظة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,160,عرض التشغيل القادم.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,161,عرض آخر تشغيل.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,162,عرض عدد الرسائل المرسلة في كل جدول.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,163,عرض عدد العمليات الفاشلة.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,164,تشغيل الجدولة من Backend.,CODED_CONFIG_AND_TEST_NEEDED,"Vercel+Redis+Cloudflare DO alarm server-side runner, opt-in setup required.","Vercel+Redis+Cloudflare DO alarm server-side runner, opt-in setup required."
+A,165,الاحتفاظ بالجداول بعد إغلاق المتصفح.,CODED_CONFIG_AND_TEST_NEEDED,Background scheduling while browser closed using Cloudflare Durable Objects + Redis; needs deployment and real integration verification.,Background scheduling while browser closed using Cloudflare Durable Objects + Redis; needs deployment and real integration verification.
+A,166,اكتشاف عمليات التشغيل الفائتة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,167,منع تنفيذ نفس المهمة مرتين.,CODED_CONFIG_AND_TEST_NEEDED,Server-side Redis SET NX lock and pre-send journal prevent blind retry of uncertain results.,Server-side Redis SET NX lock and pre-send journal prevent blind retry of uncertain results.
+A,168,الاستفادة من Queue وCron وDurable Objects عند الحاجة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,169,تسجيل حالات اكتمال وفشل وإلغاء المهام.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,170,مراقبة القنوات المباشرة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,171,إشعار بدء البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,172,إشعار انتهاء البث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,173,إشعارات انتهاء صلاحية التوكنات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,174,إشعارات أخطاء الإرسال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,175,إشعارات انقطاع الاتصال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,176,إشعارات بدء وانتهاء الجداول.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,177,مركز إشعارات موحد.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,178,إشعارات صوتية اختيارية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,179,إعداد أوقات عدم الإزعاج.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,180,تحديد أولوية التنبيهات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,181,منع تكرار التنبيه خلال مدة قصيرة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,182,سجل نشاط البثوث والحسابات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,183,إعادة الاتصال عند انقطاع الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,184,عرض حالة الاتصال وإعادة الاتصال.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,185,عرض حالة الخدمات الخلفية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,186,عرض أخطاء API بصورة مفهومة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,187,زر نقاط مستقل أعلى كل بث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,188,عرض نقاط القناة لكل حساب متصل إذا كانت البيانات متاحة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,189,عرض النقاط المكتسبة أثناء البث إذا أمكن قياسها فعليًا.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,190,عرض مدة المشاهدة الخاصة بكل حساب عند توفرها.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,191,عرض مستوى Level الخاص بكل حساب إذا كان متاحًا.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,192,عرض إحصائيات النقاط لكل حساب في نافذة واحدة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,193,معرفة وجود متجر مكافآت النقاط بالقناة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,194,فتح متجر مكافآت القناة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,195,عرض مكافآت المتجر الحقيقية.,PARTIAL_CONFIG_AND_TEST_NEEDED,Only own channel reward data via scope,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,196,عرض تكلفة كل مكافأة بالنقاط.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,197,عرض وصف المكافآت ومعلوماتها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,198,متابعة قنوات Kick فعليًا بالحساب المصرح له عند توفر وسيلة مدعومة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,199,إلغاء متابعة القنوات بالطريقة المدعومة.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,200,عرض حالة متابعة الحساب للقناة عند توفر البيانات.,NOT_IN_VERIFIED_PUBLIC_API,"Do not fabricate viewer balances, follow actions, or unrelated channel rewards.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,201,إدارة أكثر من قناة في نفس التطبيق.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,202,أدوات الإشراف للقنوات المصرح للحساب بإدارتها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,203,حظر المستخدمين ورفع الحظر بالصلاحيات المناسبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,204,قواعد للكلمات المحظورة في شات القناة التي تديرها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,205,تنبيهات بمخالفات قواعد الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,206,سجل مخالفات وإجراءات إشراف.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,207,رسائل ترحيب بالأعضاء الجدد عند توافر الحدث المناسب.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,208,أوامر شات مخصصة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,209,ردود تلقائية محددة بالقواعد.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,210,التحكم في Slow Mode عند توفير صلاحيات وواجهة مناسبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,211,منع الرسائل المكررة وفق قواعد الإشراف المصرح بها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,212,متابعة أحداث الاشتراكات والهدايا والمتابعات المتاحة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,213,مكتبة داخلية للرسائل والمجموعات.,CODED_FOREGROUND,Message library retained.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,214,مكتبة ملاحظات.,CODED_FOREGROUND,Notes library retained.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,215,إنشاء وتعديل وحذف الملفات المحلية.,CODED_FOREGROUND,Local notes create/edit/delete retained.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,216,نسخ الملفات والملاحظات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,217,إضافة الملفات للمفضلة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,218,البحث والتصفية داخل المكتبة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,219,الحفظ التلقائي للتغييرات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,220,نسخ الرسائل بصيغة JSON.,CODED_FOREGROUND,"Export local JSON includes account stream settings, schedules, notes and channels; no secrets.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,221,لصق الرسائل من JSON.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,222,استيراد ملفات JSON.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,223,تصدير ملفات JSON.,CODED_FOREGROUND,JSON export includes account-specific stream defaults and schedules.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,224,الاختيار بين الإضافة والاستبدال.,CODED_FOREGROUND,Local JSON import retained.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,225,مشاركة إعدادات القنوات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,226,مشاركة مجموعات الرسائل.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,227,مشاركة الملفات المحددة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,228,مشاركة المكتبة كاملة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,229,استيراد إعدادات التطبيق.,PARTIAL_FOREGROUND_OR_CONFIG_REQUIRED,Import validated local configuration; imported active schedules restored PAUSED.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,230,نسخ احتياطي لبيانات التطبيق.,CODED_REQUIRES_LIVE_TEST,Local JSON and encrypted full backup including OAuth credentials; encrypted credentials must remain private.,Local JSON and encrypted full backup including OAuth credentials; encrypted credentials must remain private.
+A,231,استعادة النسخ الاحتياطية.,CODED_REQUIRES_LIVE_TEST,Password-encrypted restore validates Kick credentials and pauses jobs before manual restart.,Password-encrypted restore validates Kick credentials and pauses jobs before manual restart.
+A,232,استبعاد التوكنات السرية من المشاركة العادية.,CODED_CONFIG_AND_TEST_NEEDED,Local JSON excludes secrets; full backup encrypts credentials under independent passphrase.,Local JSON excludes secrets; full backup encrypts credentials under independent passphrase.
+A,233,تحذيرات قبل استبدال البيانات.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,234,التراجع عن بعض التغييرات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,235,مسح البيانات المحلية بتأكيد واضح.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,236,تخزين البيانات باستخدام IndexedDB.,PARTIAL_CONFIG_AND_TEST_NEEDED,Local IndexedDB; no remote account synchronization,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,237,تشغيل الميزات المحلية دون إنترنت.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,238,إمكانية تحويل التطبيق إلى PWA.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,239,واجهة عربية وإنجليزية كاملة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,240,دعم RTL وLTR.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,241,تصميم فاخر يجمع أناقة iOS وتنظيم Samsung One UI.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,242,واجهة داكنة احترافية.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,243,وضع فاتح واختيار ثيم النظام.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,244,تخصيص لون الواجهة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,245,استخدام خط عربي أنيق قريب من خط iOS.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,246,بطاقات وأزرار ناعمة ومستديرة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,247,شريط تنقل عائم شبيه بتطبيقات Mac.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,248,أيقونات احترافية مع أسماء واضحة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,249,تصميم متجاوب مع جميع أحجام الشاشات.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,250,خيارات تصغير وتكبير كثافة الواجهة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,251,تخصيص أحجام الشات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,252,تخصيص شكل وعرض الشارات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,253,تخصيص إظهار التوقيت.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,254,تخصيص حركة التمرير.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,255,اختيار مستوى توفير البيانات.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,256,إيقاف تحميل صور المستخدمين.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,257,إيقاف تحميل صور البثوث.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,258,تقليل تحديث الصور.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,259,تعطيل تشغيل الفيديو التلقائي.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,260,تقليل استهلاك البطارية.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,261,تقليل الرسوم المتحركة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,262,نوافذ منبثقة احترافية.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,263,رسائل Toast صغيرة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,264,حالات تحميل Skeleton.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,265,البحث والفرز في القوائم.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,266,حفظ تفضيلات التصميم تلقائيًا.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,267,دعم الاستخدام باللمس ولوحة المفاتيح.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,268,عدم إظهار أي نصوص تطويرية أو تعليمات للمبرمج في الواجهة العامة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,269,عدم استخدام بيانات وهمية أو محاكاة للوظائف الحقيقية.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,270,الحفاظ على منطق JavaScript الأصلي أثناء تغيير التصميم.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,271,استخدام HTML وCSS وJavaScript مباشرة دون React أو Vite.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,272,دعم ملف HTML واحد أثناء بناء النسخة التجريبية.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,273,إعداد مشروع جاهز للنشر عبر GitHub وVercel.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,274,فصل أسرار وخدمات Backend عن الملفات العامة.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,275,ربط التطبيق بخدمات Cloudflare Workers.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,276,ربط Backend إضافي على Vercel.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,277,استخدام قواعد بيانات مشتركة عند الحاجة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,278,تجربة توزيع الخدمات على عشرة حسابات Cloudflare، في حدود السياسات المسموح بها ودون التحايل على حصص الاستخدام.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,279,اختيار Backend عامل عند تعطل خدمة أخرى.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,280,إدارة الطلبات من خلال Queue مشتركة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,281,تخزين التوكنات والأسرار في الخادم.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Encrypted HttpOnly browser cookie, not server database",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,282,منع تسريب Client Secret للمتصفح.,CODED_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,283,استخدام OAuth PKCE وState.,CODED_REQUIRES_LIVE_TEST,"Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing.","Implemented in v4 client/server where configured, covered by offline tests only; live Kick/Cloudflare needs testing."
+A,284,حماية الجلسات والطلبات من الوصول غير المصرح.,PARTIAL_CONFIG_AND_TEST_NEEDED,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,285,استقبال أحداث Kick باستخدام Webhooks.,PARTIAL_CONFIG_AND_TEST_NEEDED,Signed webhooks require Redis storage,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,286,التحقق من صحة طلبات Webhook.,PARTIAL_CONFIG_AND_TEST_NEEDED,RSA-SHA256 + current Kick public key,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,287,معالجة انقطاع السيرفر دون فقدان حالات المهام المحفوظة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,288,إدارة الاشتراكات المدفوعة في التطبيق.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,289,إنشاء أكواد تفعيل للاشتراكات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,290,أكواد تفعيل تستخدم مرة واحدة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,291,تحديد مدة صلاحية الاشتراك.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,292,تجديد وتمديد الاشتراكات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,293,ربط الاشتراك بجهاز أو جلسة عند الحاجة.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,294,لوحة تحكم لإدارة المشتركين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,295,إيقاف وإلغاء تفعيل الاشتراكات.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,296,إدارة صلاحيات المستخدمين.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,297,حماية الوظائف المدفوعة من التعديل من المتصفح.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,298,سجل محاولات الدخول والاستخدام.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,299,مراقبة استهلاك الخدمة وحدودها.,NOT_IMPLEMENTED,No claim of active functionality; revisit official permissions and integration.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+A,300,التحقق من صحة الملفات والبيانات المدخلة.,CODED_REQUIRES_LIVE_TEST,"Implemented in new frontend/backend, but not tested with private Kick credentials.",No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,1,رسم بياني مباشر لتغير عدد المشاهدين,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,2,اكتشاف أعلى ذروة مشاهدة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,3,مراقب سرعة نمو المشاهدين,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,4,مقارنة أداء عدة بثوث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,5,تقرير تحليلي بعد انتهاء البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,6,اكتشاف أفضل أوقات البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,7,مستكشف البثوث الجديدة حسب التصنيف,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,8,البحث المتقدم باستخدام Custom Tags,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,9,رادار نشاط التصنيفات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,10,اكتشاف البثوث التي بدأت حديثًا,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,11,اكتشاف عدم استقرار البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,12,سجل تغييرات بيانات البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,13,تعديل بيانات البث من داخل KAC,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,14,التراجع عن تعديل بيانات البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,15,علامات مرجعية زمنية داخل البث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,16,محرر مكافآت القناة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,17,صندوق طلبات استبدال المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,18,قبول أو رفض طلب استبدال مكافأة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,19,البحث التفصيلي داخل طلبات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,20,ترتيب المكافآت حسب الاستخدام,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,21,تحليل النقاط المستخدمة في استبدال المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,22,قياس مدة معالجة طلبات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,23,سجل إصدارات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,24,تصدير سجل طلبات المكافآت,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,25,لوحة ترتيب هدايا KICKs,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,26,خط زمني لهدايا KICKs,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,27,تنبيهات الهدايا الكبيرة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,28,تحليل المشتركين المدفوعين والمهديين,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,29,تحليل أنواع أحداث الاشتراكات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,30,رسم بياني لنمو المتابعات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,31,خريطة اللحظات الأعلى تفاعلًا,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,32,رسم بياني لكثافة الشات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,33,حساب المشاركين النشطين في المحادثة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,34,صندوق الأسئلة المباشرة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,35,اكتشاف الأسئلة المتكررة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,36,خريطة المحادثات المتفرعة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,37,إعادة تشغيل أحداث الشات المسجلة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,38,ترجمة رسالة محددة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,39,القراءة الصوتية للرسائل,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,40,الكتابة الصوتية للرسائل,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,41,اكتشاف أول ظهور مرصود للمستخدم,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,42,فحص الروابط المريبة في الشات,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,43,تحليل الإيموتات الأكثر استخدامًا,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,44,تحليل الكلمات والموضوعات الشائعة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,45,نافذة فيديو عائمة Picture-in-Picture,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,46,إدارة الصوت عند مشاهدة عدة بثوث,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,47,مشاركة تقرير مشاهدة مباشر للقراءة فقط,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,48,مزامنة حالة لوحة التحكم بين الأجهزة,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,49,مصفوفة الصلاحيات الفعلية,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.
+B,50,مقياس تأخير وصول أحداث Kick,NOT_IMPLEMENTED,Additional roadmap feature; not exposed in live UI.,No new validated implementation claim for this requirement in v4; refer to original status and report.

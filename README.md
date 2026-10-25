@@ -1,94 +1,78 @@
-# KAC — نسخة إعادة البناء 2026.10
+# KAC v4 — Kick Account Controller
 
-**النسخة دي تنفيذ حقيقي جزئي من متطلبات KAC الـ350، مش إعلان إن الـ350 ميزة اتنفذت.** الواجهة عربية/إنجليزية، HTML/CSS/JavaScript بدون React أو npm أو حزم. الـBackend ملف Node.js واحد في `api/index.js` قابل للنشر على Vercel. مفيش توكنات تجريبية داخل التطبيق أو ردود Kick مفبركة.
+**نسخة تنفيذية مطوّرة من v3، وليست تنفيذًا كاملًا للـ350 ميزة.** محتوى التطبيق قابل للنشر مباشرة من GitHub، ولكن تشغيل الجدولة بعد إغلاق المتصفح يحتاج خدمتين منفصلتين، وإضافة أسرارهما عند المستخدم. لا توجد API مزيفة في التطبيق؛ الاختبارات تستخدم Fixtures مستقلة عن التطبيق نفسه.
 
-## بداية سريعة من الموبايل — GitHub ثم Vercel
+## الجديد
 
-1. اعمل مستودع GitHub جديد، وارفع محتويات ملف `KAC-2026.zip` **بنفس المجلدات**. خلي `index.html`, `style.css`, `script.js`, `vercel.json` في الجذر، و`index.js` **داخل** المجلد الوحيد `api`. لا ترفع الملفات الأصلية القديمة للريبو العام: قد تحتوي إعدادات أو بيانات تخصك.
-2. افتح https://vercel.com/new واختر **Import Git Repository**، وحدد المستودع. **Framework Preset: Other**، و**Root Directory: `./`**. لا تحتاج Build Command ولا Output Directory مخصصة؛ اترك الإعدادات الافتراضية للـStatic Site + Serverless Functions.
-3. من إعدادات تطبيقك في https://kick.com/settings/developer (أو بوابة Kick Dev) هات **Client ID** و**Client Secret** الخاصين بتطبيقك.
-4. من Vercel افتح **Project → Settings → Environment Variables** وحط القيم التالية **من غير علامات تنصيص**:
+- جدولة ذات مستويين: لكل **حساب** قنواته وجداول كل قناة، وإمكانية إيقاف حساب، بث، أو جدول مستقل.
+- جدولة خادمية اختيارية باستخدام **Cloudflare Workers + SQLite-backed Durable Objects (alarms)**، تحفظ حالة كل جدول في **Upstash Redis** على جهة Vercel. تظل صلاحيات Kick وتوكنات المستخدمين على Vercel، ولا تنتقل إلى Cloudflare.
+- حقل الفاصل الأدنى **3 ثوانٍ**، وفاصل عشوائي بين حد أدنى وأقصى، و**عدد غير محدد** من المحاولات حتى إيقاف الجدول أو بلوغ نهاية الوقت أو فشل طلب؛ هذا ليس إذنًا بتجاوز حدود Kick أو ضمانًا للإرسال كل 3 ثوانٍ. عند HTTP 429 والتأخير/الرفض تتوقف العملية بدل التحايل على حدود المنصة.
+- إنشاء جدول **مسودة لا يعمل تلقائيًا** عند عدم تحديد بداية. بداية مستقبلية تبدأ عبر Cloudflare عند الموعد المحدد إن كانت الخدمة متاحة. يمكن بدء المسودات يدويًا.
+- عدد المقبول من Kick، المرفوض، غير المؤكد، والمنتظر لكل حساب؛ نتيجة `is_sent=true` تعني قبول طلب الإرسال، وليس تأكيد ظهور الرسالة في الشات.
+- **تجديد OAuth تلقائيًا** عند طلب الحساب، مع محاولة دورية للخادم كل نصف ساعة تقريبًا بعد تفعيل Cloudflare، حسب صلاحية Refresh Token وتوافر Kick. لا يمكن ضمان إبقاء حساب متصل للأبد إذا ألغي التفويض أو انتهت صلاحية التوكن أو رفض Kick التجديد.
+- إضافة توكن **User Access Token رسمي** بعد التحقق من `POST /oauth/token/introspect` والتأكد من أنه نشط وصادر لهذا التطبيق، والتحقق من هوية مستخدمه عبر واجهة Kick. يمكن إرفاق Refresh Token رسمي تابع له. **توكن App Access ليس حساب مستخدم، والتوكنات القديمة بصيغة `ID|SESSION` ليست OAuth ولا يدعمها هذا التكامل.**
+- **نسخ احتياطي شامل مشفر** بكلمة مرور 12 حرفًا على الأقل باستخدام PBKDF2-SHA256 (310000 دورة) وAES-256-GCM؛ يشمل إعدادات الواجهة والقنوات والملاحظات والجداول وتوكنات الحسابات المشفرة داخل الكود. لا تصدّر التوكنات بلا تشفير. الاستعادة تتحقق من الحسابات عبر Kick، وتبلغ عن الحسابات التي تحتاج إعادة ربط. لا تبدأ الجداول المستعادة من نفسها.
+- تبقى وظائف الشات الحقيقي والمكتبة والقنوات والثيمات والتحكم كما في الإصدار السابق وفق القيود الموثّقة.
 
-   - `KICK_CLIENT_ID` = Client ID الخاص بتطبيق Kick.
-   - `KICK_CLIENT_SECRET` = Client Secret الحقيقي، **في Vercel فقط**.
-   - `SESSION_SECRET` = سلسلة عشوائية قوية لا تقل عن 32 حرفًا (الأفضل 64+ حرفًا عشوائيًا). لا تنسخ أي مثال أو قيمة تجريبية.
-   - `KICK_REDIRECT_URI` = `https://YOUR-PROJECT.vercel.app/api?action=callback` — بدّل `YOUR-PROJECT` باسم مشروعك الفعلي.
+## المرحلة الأولى — نشر الواجهة والخادم على Vercel
 
-5. في إعدادات Kick Developer ضيف نفس قيمة `KICK_REDIRECT_URI` كـ **Redirect URI**، بنفس الحروف بالضبط.
-6. من Vercel اختر **Redeploy** بعد إضافة القيم. افتح `https://YOUR-PROJECT.vercel.app/api?action=health`؛ وجود `configured: true` يعني الإعدادات المطلوبة موجودة، **مش** إن حساب Kick اتجرب بالفعل.
-7. افتح رابط موقعك، واضغط **ربط حساب Kick**. هيتفتح تسجيل الدخول الرسمي، وبعد الموافقة هترجع للموقع. ساعتها جرب إضافة قناة حقيقية وفتح شات البث وإرسال رسالة **يدوية مصرح بها**.
+1. فك ضغط الحزمة. ارفع **محتويات الحزمة** إلى الجذر في مستودع GitHub الحالي، بما فيها مجلد `api` ومجلد `cloudflare`، وليس ملف ZIP نفسه.
+2. على Vercel افتح مشروعك المتصل بمستودع GitHub. **Framework Preset: Other**، و**Root Directory: `./`**، وسيب Build Command فاضي.
+3. من Project → Settings → Environment Variables أضف أو احتفظ بالقيم السابقة (في **Production**):
+   - `KICK_CLIENT_ID`
+   - `KICK_CLIENT_SECRET`
+   - `KICK_REDIRECT_URI` = `https://YOUR-VERCEL-DOMAIN/api?action=callback` بنفس رابط Kick Developer
+   - `SESSION_SECRET` (سلسلة عشوائية قوية 32 حرفًا على الأقل)
+   - `UPSTASH_REDIS_REST_URL` (من Upstash Redis)
+   - `UPSTASH_REDIS_REST_TOKEN` (من Upstash Redis)
+4. اضغط **Redeploy** لو أضفت متغيرات بعد أول نشر. افحص `https://YOUR-VERCEL-DOMAIN/api?action=health` — القيمة `chatStorage:true` تشير لوجود إعداد Redis، مش لفحص الاتصال الحقيقي.
+5. حافظ على Webhook Kick إن كنت تستخدمه: `https://YOUR-VERCEL-DOMAIN/api?action=webhook`. لا تغيّر Redirect URI لو الدومين لم يتغير.
 
-> مهم: فتح `index.html` مباشرة من مدير الملفات يشغّل أقسام الواجهة والمكتبة المحلية فقط. OAuth وإرسال الشات والتحقق من القنوات يحتاجوا خادم HTTPS منشور ومفاتيح حقيقية. خدمات Kick قد ترفض حسابًا أو تطبيقًا حسب الصلاحيات والحدود؛ لا يوجد ضمان قبول مسبق.
+## المرحلة الثانية — الاستمرار الحقيقي بعد غلق المتصفح
 
-## تشغيل الأحداث الحقيقية والشات
+Cloudflare Durable Objects متاح أيضًا على الخطة المجانية مع **SQLite-backed** objects، لكن تفعيل الخدمة وحدودها يخضعان لحالة حسابك. لا تحتاج تثبيت Node/Python على الموبايل عند استخدام GitHub integration.
 
-الـPublic API الرسمي في Kick يسمح بإرسال الرسائل، لكن **تاريخ الشات العام** ليس واجهة REST متاحة للتطبيق لاسترجاع جميع الرسائل القديمة. الحل الرسمي للأحداث الجديدة هو Webhooks. عشان الشات يعرض أحداث حقيقية:
+1. افتح **Cloudflare dashboard → Workers & Pages → Create application → GitHub** (أو اختر Connect Repository).
+2. اختار **نفس مستودع GitHub** الموجود على Vercel، وفرع `main`.
+3. في إعدادات البناء اضبط:
+   - **Worker name:** `kac-background` (بالضبط كما في `cloudflare/wrangler.jsonc`).
+   - **Root directory:** `cloudflare`.
+   - **Build command:** سيبه فارغًا.
+   - **Deploy command:** `npx wrangler deploy`.
+4. بعد النشر افتح **Worker → Settings → Variables and Secrets**، واضف Runtime Secrets:
+   - `BACKGROUND_WORKER_SECRET` = سلسلة عشوائية **من 32 حرفًا على الأقل**، لا تضعها في GitHub، واحتفظ بنسخة آمنة منها.
+   - `VERCEL_BACKGROUND_ENDPOINT` = `https://YOUR-VERCEL-DOMAIN/api?action=background_execute`.
+5. ارجع إلى **Vercel → Project → Settings → Environment Variables** وأضف:
+   - `BACKGROUND_WORKER_URL` = رابط Worker الحقيقي `https://kac-background.YOUR-CLOUDFLARE-SUBDOMAIN.workers.dev/`.
+   - `BACKGROUND_WORKER_SECRET` = **نفس القيمة تمامًا** التي وضعتها في Cloudflare.
+6. اعمل **Redeploy** لـCloudflare Worker بعد تحديث Runtime Secrets إذا لزم، ثم **Redeploy** لمشروع Vercel.
+7. افتح `https://YOUR-VERCEL-DOMAIN/api?action=health`. لو `background:true`، ده يعني إن تكوين Redis والمتغيرات موجود — **مش تأكيد وصول Worker**. اختبر حفظ جدول صغير ثم تشغيله من الحساب الذي سمح بالإرسال وتابع سجل Vercel/Cloudflare والرد الحقيقي من Kick. الأزرار هتبلغك عن أخطاء الاتصال عند محاولة الحفظ على مشغل Cloudflare.
 
-1. جهز Redis يدعم Upstash REST API بشكل دائم، وضيف في Vercel `UPSTASH_REDIS_REST_URL` و `UPSTASH_REDIS_REST_TOKEN`. ده إعداد **اختياري** لباقي التطبيق لكنه **أساسي** لعرض الشات عبر Webhooks في النسخة دي.
-2. افتح إعداد Kick Developer وفعّل Webhooks على رابط `https://YOUR-PROJECT.vercel.app/api?action=webhook`.
-3. أعد النشر وافتح أي قناة محفوظة، ومن صفحة الشات اضغط **الاشتراك في أحداث القناة**. الباكيند بيطلب الاشتراك الرسمي في `chat.message.sent` و `livestream.status.updated` باستخدام App Access Token.
-4. أي رسالة توصل بعد بدء الاشتراك، بعد **تأكيد التوقيع باستخدام المفتاح العام الحالي من Kick**، بتتسجل بحد أقصى آخر 350 حدث/قناة مع مدة حفظ 48 ساعة، وبتتعرض في التطبيق مع فاصل تحديث تختاره. الرسائل القديمة قبل الاشتراك مش متاحة من النظام ده.
-5. زر إرسال رسالة **لا** يضيفها تلقائيًا للشات كأنها استُقبلت؛ Kick قد يقبل الطلب عبر `is_sent: true` ثم يظهر الحدث الموثق بعد وصول Webhook فعليًا.
+**مهم:** Worker لا يُنشر مع Vercel تلقائيًا؛ هو مشروع نشر ثانٍ على Cloudflare مربوط بنفس المستودع. لو مش قادر تفعّل Cloudflare، يظل التطبيق يعمل محليًا لكن **الجدولة لن تكون مضمونة بعد غلق المتصفح**، حتى لو اتصال الإنترنت شغال.
 
-**ملاحظة مهمة:** لو Redis غير مضبوط أو توقيع الحدث غير صحيح، الشات **مش** هيعرض بيانات مفبركة. تأكيد الإرسال من Kick منفصل عن تأكيد استلام الرسالة من Webhook.
+## الخصوصية والتحكم
 
-## اللي اتنفذ في الكود حاليًا
+- **لا ترسل** Client Secret أو توكنات OAuth أو كود النسخة المشفرة أو كلمة مرورها في المحادثات أو GitHub. كود النسخ المشفر يحتوي على بيانات تسجيل حساسة محمية بكلمة مرور؛ حفظ الكود وكلمة المرور معًا غير آمن. لا يمكن استرجاع كلمة المرور المفقودة.
+- الاستعادة تتحقق من توكن الحساب بواجهة Kick الرسمية، وبالتالي قد ترفض توكنًا أُلغي تفويضه. عند استبدال الحسابات، يجري إيقاف الجداول القديمة المرتبطة بالجلسة عند نجاح الاتصال بالخلفية.
+- استيراد البيانات المحلية JSON غير المشفرة لا يحتوي على التوكنات؛ لو عايز نقل حساباتك استخدم كود النسخة **المشفر** فقط.
+- لا تُعتبر `is_sent: true` دليلًا على ظهور الرسالة في الشات؛ استقبال أحداث Webhook منفصل. لا إعادة إرسال تلقائية لطلبات قد تكون نجحت رغم انتهاء المهلة.
+- وقف الجدول وهو بيرسل بالفعل ممكن يوقف الطلبات التالية لكنه مش ضمان لإلغاء رسالة خرج طلبها لـKick.
+- الفاصل 3 ثوانٍ قيمة واجهة دنيا، مش معدل إرسال مضمون، وبيخضع لحدود Kick وحالة الخدمة؛ لا تستخدم الحسابات أو السيرفرات للتحايل على الحصص.
 
-- واجهة Premium متجاوبة للموبايل والتابلت والكمبيوتر، عربي/إنجليزي، RTL/LTR، ثيمات **Dark/Light/OLED** وأربعة ألوان، Dock للموبايل، أزرار فعلية وحالات فارغة وحفظ تفضيلات.
-- حفظ القنوات/الملاحظات/تفضيلات الواجهة في **IndexedDB**، إضافة وحذف وتثبيت القنوات، مكتبة رسائل وملاحظات، استيراد وتصدير JSON للبيانات المحلية **بدون توكنات**، خيار تقليل الصور والحركة والطلبات.
-- **OAuth 2.1 + PKCE S256 + state** مع exchange/refresh بـClient Secret على الخادم فقط؛ بيانات حسابات مخفية التوكنات في **كوكي مشفر HttpOnly**، وتفاصيل عامة فقط للواجهة.
-- **GET /public/v1/channels** بتوكن تطبيق على الخادم، مع واجهة بطاقات تظهر الحالة الحقيقية، عنوان البث، التصنيف، عدد المشاهدين عندما يظهر في رد Kick؛ لا نعرض stream key أو stream URL الحساسة حتى لو وردت من واجهة Kick.
-- **POST /public/v1/chat** من User OAuth token بالصلاحية الصحيحة، واستخدام `type:user`, `broadcaster_user_id`, `content`، ودعم `reply_to_message_id`، والتحقق من `is_sent` وHTTP errors و429 وعدم إعادة المحاولة تلقائيًا لو النتيجة غير مؤكدة.
-- اشتراكات أحداث Kick الرسمية واستقبال Webhook بتوقيع RSA-SHA256، ومخزن دائم اختياري Redis مع deduplication واكتفاء بأحدث 350 حدثًا والقناة.
-- عرض مكافآت **قناة صاحب الحساب نفسه** إذا كانت `channel:rewards:read` فعّالة، لا ادعاء بجلب متجر أو رصيد نقاط **أي** قناة أو أي مشاهد.
+## ملفات مرجعية ومراجعة
 
-## ما لم يُنفَّذ بعد (لا توجد محاكاة له)
+- `FEATURE_MATRIX.csv` — تقييم 350 متطلبًا مع توضيح المستويات الجزئية.
+- `LEGACY_COMPARISON_20.csv` — فروق ومقارنة مع النسخ الأصلية.
+- `FEATURE_AUDIT_370.md` — الـ350 بند + 20 بندًا من واجهات القديم، والأجزاء الناقصة.
+- `smoke.test.js`، `scheduler.test.js`، `v4.test.js` — اختبارات Node تستخدم Kick/Redis/Worker وهمية **داخل بيئة الاختبار فقط**. التطبيق نفسه لا يولّد نجاحًا وهميًا.
 
-- رصيد نقاط المستخدمين ومستواهم ونقاط مشاهدتهم الحية، والمتابعة الرسمية كفعل من التطبيق، وأرشيف الشات الكامل قبل الاشتراك: لم يتم التحقق من وجود واجهة عامة موثقة تدعمها لنفس الاستخدام.
-- جداول الإرسال المستمرة بعد غلق المتصفح، Tasks/Cron/Queues متعددة الحسابات، الاشتراكات المدفوعة، الحظر/الإشراف، مكتبة حسابات مشتركة بين الأجهزة، النوافذ متعددة البث، تحليلات 50 ميزة الإضافية: **تحت التطوير** ولا تُعرض كميزات شغالة.
-- **محدودية الحسابات**: الكوكي المشفر له حد حوالي 3.7KB، فعدد الحسابات المحفوظة عبر OAuth محدود حسب طول التوكنات. تطبيق حسابات كثيرة بحق يحتاج Database للجلسات، مع ACL ومفاتيح وتوزيع مضبوطين؛ Redis الحالي للأحداث فقط.
-- حالات الـ429 وRetry-After تُعرض أخطاؤها، لكن ليس هناك queue موزعة للإرسال بلا Redis. لا تستخدم نسخ السيرفرات أو الحسابات لتجاوز حدود Kick.
-- عمليات المصادقة والإرسال والإشعارات **لم يتم اختبارها بتوكن Kick حقيقي في بيئة النشر** لأن مفاتيحك غير موجودة. اختباراتنا آلية *بمحاكاة نقل API داخل الاختبارات فقط*، لا تحاول إظهار بيانات مزيفة داخل المنتج.
-- **النواة الأصلية الضخمة لم تندمج بالكامل** داخل هذا الإصدار. الملفات اللي أرسلتها محفوظة **كما هي** في أرشيف منفصل للتدقيق والدمج التدريجي؛ نقل آلاف الأسطر المكررة غير الآمنة للواجهة الجديدة بلا مراجعة كان هيكرر أخطاء التطبيق.
+شغّل الاختبارات في CI أو بيئة Node: `node --check script.js` و`node --check api/index.js` و`node smoke.test.js` و`node scheduler.test.js` و`node v4.test.js`.
 
-## تشغيل الاختبارات
+## مصادر
 
-مع توفر Node 20+ محليًا أو عبر GitHub Actions: `node smoke.test.js`. الاختبارات لا تحتاج إنترنت ولا تؤدي إرسالًا فعليًا إلى Kick. لا تستخدمها كدليل نجاح إرسال حي.
-
-## المراجع الرسمية المستخدمة
-
-- Kick API Swagger: https://api.kick.com/swagger/doc.json
-- OAuth 2.1: https://github.com/KickEngineering/KickDevDocs/blob/main/getting-started/generating-tokens-oauth2-flow.md
-- Scopes: https://github.com/KickEngineering/KickDevDocs/blob/main/scopes/scopes.md
-- Chat endpoint: https://github.com/KickEngineering/KickDevDocs/blob/main/apis/chat.md
-- Kick Events: https://github.com/KickEngineering/KickDevDocs/blob/main/events/event-types.md
-- Webhook verification: https://github.com/KickEngineering/KickDevDocs/blob/main/events/webhook-security.md
-- Channel rewards: https://github.com/KickEngineering/KickDevDocs/blob/main/apis/channel-rewards.md
-- Vercel Node Functions: https://vercel.com/docs/functions/runtimes/node-js
-
-## أمن وخصوصية
-
-متحطش `Client Secret` أو `SESSION_SECRET` أو توكن شخصي في JavaScript أو GitHub العام. الكوكي مشفر AES-GCM وموسوم HttpOnly, Secure, SameSite=Lax؛ **ده مش بديل** لقاعدة جلسات خادم قابلة للإبطال عند الحاجة لتطبيق متعدد المستخدمين على نطاق كبير. فصل حساب من KAC يمسحه من جلستك؛ لا يلغيه عند Kick تلقائيًا. لإبطال الصلاحيات من Kick استخدم إدارة التطبيقات المتصلة في حساب Kick. تخزين أحداث شات عام لمدة 48 ساعة يخضع لمراجعة سياسة البيانات والخصوصية قبل إطلاق خدمة عامة.
-
-
-## 2026.10.1 — استعادة وظائف مهمة (تحديث تصحيحي)
-
-النسخة دي مبنية على **KAC-2026 السابقة** ولا تحذف الملفات الأربعة الخاصة بالإعدادات (`.env.example`, `vercel.json`, `api/index.js`, `smoke.test.js`).
-
-- **الجدولة**: صفحة جديدة للجداول المتعددة بأسماء وحساب وقناة لكل جدول، نص متعدد الأسطر، اختيار عشوائي أو بالترتيب، مدة بين الرسائل 30–3600 ثانية، حد أقصى 30 رسالة للجدول، بداية ونهاية اختيارية، بدء فوري، إيقاف مؤقت، استكمال يدوي، إلغاء وحذف، سجل نتيجته، مع تخزين الجداول في IndexedDB. يتم تنفيذ الإرسال عبر POST `/api?action=send` في نفس الخادم الآمن وليس طلبًا وهميًا.
-- **لا تشغيل في الخلفية**: الجدولة تعمل أثناء فتح التبويب وظهوره فقط. عند إخفاء التبويب أو إغلاق المتصفح تتوقف، والجدول الذي فات ميعاده يصبح «فات موعده». عند فتح الموقع تاني يمكن الاستكمال **يدويًا**. عدم إعادة الطلب المشكوك فيه يهدف لمنع رسائل مكررة. الجداول بعد إغلاق المتصفح تحتاج Backend Scheduler مستقل مع Redis لجلسات OAuth/Jobs و queue موثوق، وهو **غير مدمج**. Vercel Hobby Cron لا يشغّل أكثر من مرة يوميًا وله دقة على مدار ساعة: https://vercel.com/docs/cron-jobs/usage-and-pricing
-- **Kick send**: واجهة Kick الرسمية تتحقق من `is_sent` في نتيجة الطلب؛ لا نعتبر `200` وحدها تأكيدًا، كما أن ذلك لا يعني وصول Webhook للشات. أوقف عند 429 أو غموض الطلب؛ لا يوجد تجاوز لحدود Kick ولا إعادة إرسال تلقائي مشبوهة.
-- **مشغل البث**: تشغيل/إغلاق مشغل Kick الرسمي `https://player.kick.com/<slug>?autoplay=false` داخل صفحة الشات، وعرضه في نفس الشاشة بجانب الشات، إن كانت القناة تسمح بالتضمين. المشغل لا يبدأ تلقائيًا. المصدر: https://help.kick.com/en/articles/8010826-how-to-embed-your-kick-livestream
-- **تحسينات الشات**: بحث في الأحداث الملتقطة، العودة إلى أحدث رسالة، عرض شارات نصية إذا وصلتها البيانات، التمييز بين حساباتك، سياق الرد إن وُجد، نقل نصوص المكتبة إلى الجدولة. الإيموتات غير المتوفرة بصورتها الأصلية تظهر باسمها بدل صورة مزيّفة. الـWebhooks الموقعة وRedis لازالوا متطلبين لوصول الشات الحقيقي.
-- **الحفظ والتحديث**: نستخدم اسم قاعدة IndexedDB الموجود في نسخة KAC-2026 لاستمرار بيانات القنوات والمكتبة الحالية، ونضيف مصفوفة `jobs` إلى نفس السجل؛ الملفات المرفوعة إلى GitHub لا تنقل بيانات IndexedDB بين الأجهزة تلقائيًا.
-
-### تحديث المشروع على GitHub
-
-1. افتح مستودع مشروع KAC الحالي. استبدل الملفات من الأرشيف الجديد: `index.html`, `style.css`, `script.js`, `vercel.json`، واحتفظ بملف `api/index.js` داخل `api/` (نفس المسار).
-2. احفظ التغييرات `Commit changes`. راقب `Vercel → Deployments` حتى تصبح الحالة `Ready`. لا تحتاج تغيير `KICK_CLIENT_ID`, `KICK_CLIENT_SECRET`, `KICK_REDIRECT_URI`, `SESSION_SECRET` إن كانت صحيحة مسبقًا.
-3. جرّب الإرسال اليدوي الأول. ثم افتح «الجدولة» واختر الحساب والقناة وادخل كل رسالة في سطر، وحدد الفاصل والعدد، واضغط «بدء الآن». خلي تبويب التطبيق مفتوحًا ومرئيًا وقت إرسال الرسائل.
-4. لشات حقيقي، تأكد من `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` وWebhook URL في إعدادات Kick، ثم اشترك في أحداث القناة. `chatStorage: true` **يعني وجود المتغيرات** ولا يثبت وحده نجاح استقبال الأحداث.
-
-### حدود الاختبار
-
-اختبار `node smoke.test.js` وفحص `node --check` نجحا. **لا يوجد اختبار حي** باستخدام حساب Kick أو مصادقة Kick من المستخدم، ولا نضمن حتى الآن عمل جميع الميزات في النشر الحقيقي. نسخة HTML الأصلية الكبيرة محفوظة منفصلة ولا ندّعي نقل جميع خواصها. تتبع المتطلبات مفصل في `FEATURE_MATRIX.csv`.
+- Kick OAuth + introspection: https://github.com/KickEngineering/KickDevDocs/blob/main/getting-started/generating-tokens-oauth2-flow.md
+- Kick API permissions: https://github.com/KickEngineering/KickDevDocs/blob/main/scopes/scopes.md
+- Cloudflare alarms: https://developers.cloudflare.com/durable-objects/api/alarms/
+- Cloudflare Workers Git build: https://developers.cloudflare.com/workers/ci-cd/builds/configuration/
+- Vercel Hobby Cron limits: https://vercel.com/docs/cron-jobs/usage-and-pricing
+- Browser timer throttling: https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API

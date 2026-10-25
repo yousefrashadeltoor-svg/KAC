@@ -1,0 +1,21 @@
+﻿ID,Older app capability reviewed,Current v3 status,Implementation notes
+L01,قائمة الحسابات الرئيسية داخل الجدولة,DONE_LOCAL,"Account cards, one per linked OAuth account."
+L02,ربط بثوث متعددة لكل حساب,DONE_LOCAL_API_VALIDATION,Add Stream verifies official Kick channel and stores per-account link.
+L03,إعدادات خاصة لكل بث داخل حساب,DONE_LOCAL,Per-account/per-stream editable templates persist in IndexedDB.
+L04,حفظ مجموعات الرسائل لكل بث,DONE_LOCAL,Saved messages on a channel profile; can reuse in multiple schedules.
+L05,تحديد ترتيب الرسائل أو العشوائية,DONE_LOCAL,Order/random at schedule level.
+L06,فاصل ثابت مستقل,DONE_LOCAL,Fixed delay 30–3600 seconds.
+L07,فاصل عشوائي مستقل بحدين,DONE_LOCAL,Random delay uses crypto sampling between validated min/max.
+L08,عدة جداول لنفس الحساب والبث,DONE_LOCAL,Independent jobs for same account/stream.
+L09,إيقاف جدول واحد,DONE_LOCAL,Schedule pause/stop independently.
+L10,إيقاف إرسال بث واحد لحساب محدد,DONE_LOCAL,Stream toggle pauses only matching account/stream jobs.
+L11,إيقاف كل جداول حساب واحد,DONE_LOCAL,Account toggle pauses only that account jobs.
+L12,تشغيل كل الجداول بعد غلق المتصفح,NOT_DONE,Needs persistent server-side queue + clock/workers; Vercel Hobby Cron once/day only.
+L13,جدولة يومية وأسبوعية مستمرة,NOT_DONE,Not coded; no 24/7 background executor.
+L14,إرسال غير محدود متواصل,NOT_DONE_UNSAFE,Never claim unlimited or bypass Kick limits; bounded to 30 attempts per job.
+L15,إرسال متزامن بعدة حسابات,PARTIAL,"Jobs are isolated, but dispatcher serializes foreground requests for safety."
+L16,المشاهدة والشات جنب بعض,PARTIAL_LIVE_CONFIG,"Official embed + signed webhook feed, requires Redis & subscription."
+L17,جلب الشات التاريخي قبل تفعيل المراقبة,NOT_DONE_OFFICIAL_API,No verified public Kick REST endpoint for complete prior chat history.
+L18,الرد على رسالة شات محددة,PARTIAL_LIVE_CONFIG,UI + reply_to_message_id official API; needs actual logged-in account.
+L19,مكتبة رسائل وملاحظات,DONE_LOCAL,Local library and export/import; no fake cloud sync.
+L20,استخدام بروكسيات/مسارات إرسال غير رسمية من التطبيق القديم,NOT_PORTED_INTENTIONALLY,"Official send path used; avoids leaking tokens, violating scopes/rate-limits or brittle unsupported endpoints."
